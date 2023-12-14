@@ -9,9 +9,15 @@ interface SearchProps {
   onChange: (value: string) => void;
   value: string;
   placeholder?: string;
+  onPress: () => void;
 }
 
-const SearchBarComponent = ({onChange, value, placeholder}: SearchProps) => {
+const SearchBarComponent = ({
+  onChange,
+  onPress,
+  value,
+  placeholder,
+}: SearchProps) => {
   return (
     <View>
       <View style={styles.searchContainer}>
@@ -21,7 +27,7 @@ const SearchBarComponent = ({onChange, value, placeholder}: SearchProps) => {
           value={value}
           placeholder={placeholder}
         />
-        <TouchableOpacity style={styles.searchIconContainer}>
+        <TouchableOpacity style={styles.searchIconContainer} onPress={onPress}>
           <Icon
             name="search"
             size={FONTSIZES.lg}
