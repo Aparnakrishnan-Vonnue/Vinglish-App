@@ -14,6 +14,10 @@
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7699B88040F8A987B510C191 /* libPods-Vinglish-VinglishTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 19F6CBCC0A4E27FBF8BF4A61 /* libPods-Vinglish-VinglishTests.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		77A9E20EF4FE4E0CAF633E35 /* versatile-icon-set.json in Resources */ = {isa = PBXBuildFile; fileRef = 6AE06BB6418E44A8B2000FE8 /* versatile-icon-set.json */; };
+		30F6D08902554FD88E18ED32 /* books.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 981CF00ABDE44A9B93371DE9 /* books.jpg */; };
+		5E4402C2D6624DD48CAEBB34 /* noData.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 16EC42EE6CBF4BE9B5454A69 /* noData.jpg */; };
+		AB0772DD4EE74774A20CAF65 /* preview.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 2AF45E9D00DA4A488426AFDB /* preview.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +48,10 @@
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = Vinglish/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		89C6BE57DB24E9ADA2F236DE /* Pods-Vinglish-VinglishTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Vinglish-VinglishTests.release.xcconfig"; path = "Target Support Files/Pods-Vinglish-VinglishTests/Pods-Vinglish-VinglishTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		6AE06BB6418E44A8B2000FE8 /* versatile-icon-set.json */ = {isa = PBXFileReference; name = "versatile-icon-set.json"; path = "../src/assets/custom/versatile-icon-set.json"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		981CF00ABDE44A9B93371DE9 /* books.jpg */ = {isa = PBXFileReference; name = "books.jpg"; path = "../src/assets/images/books.jpg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		16EC42EE6CBF4BE9B5454A69 /* noData.jpg */ = {isa = PBXFileReference; name = "noData.jpg"; path = "../src/assets/images/noData.jpg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		2AF45E9D00DA4A488426AFDB /* preview.jpg */ = {isa = PBXFileReference; name = "preview.jpg"; path = "../src/assets/images/preview.jpg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +130,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				BBD78D7AC51CEA395F1C20DB /* Pods */,
+				E742C7B057A245FD9B8B18C2 /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -147,6 +156,18 @@
 			);
 			path = Pods;
 			sourceTree = "<group>";
+		};
+		E742C7B057A245FD9B8B18C2 /* Resources */ = {
+			isa = "PBXGroup";
+			children = (
+				6AE06BB6418E44A8B2000FE8 /* versatile-icon-set.json */,
+				981CF00ABDE44A9B93371DE9 /* books.jpg */,
+				16EC42EE6CBF4BE9B5454A69 /* noData.jpg */,
+				2AF45E9D00DA4A488426AFDB /* preview.jpg */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+			path = "";
 		};
 /* End PBXGroup section */
 
@@ -244,6 +265,10 @@
 			files = (
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				77A9E20EF4FE4E0CAF633E35 /* versatile-icon-set.json in Resources */,
+				30F6D08902554FD88E18ED32 /* books.jpg in Resources */,
+				5E4402C2D6624DD48CAEBB34 /* noData.jpg in Resources */,
+				AB0772DD4EE74774A20CAF65 /* preview.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

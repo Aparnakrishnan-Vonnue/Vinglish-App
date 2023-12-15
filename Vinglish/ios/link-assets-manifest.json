@@ -1,0 +1,21 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "src/assets/custom/versatile-icon-set.json",
+      "sha1": "445fd42e6aebdadd97479fe7be9ab65bf6acaa41"
+    },
+    {
+      "path": "src/assets/images/books.jpg",
+      "sha1": "87a952f32bd19aeb1ac80001b209a2600ee27f53"
+    },
+    {
+      "path": "src/assets/images/noData.jpg",
+      "sha1": "4ea04316657d1d706a03fae2f3113939c785b5b0"
+    },
+    {
+      "path": "src/assets/images/preview.jpg",
+      "sha1": "166677df51ae8791476e89b158680bcafe83371e"
+    }
+  ]
+}
