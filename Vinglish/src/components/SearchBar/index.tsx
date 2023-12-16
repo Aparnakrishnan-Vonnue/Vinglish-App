@@ -26,6 +26,7 @@ const SearchBarComponent = ({
           onChangeText={onChange}
           value={value}
           placeholder={placeholder}
+          placeholderTextColor={COLORS.action.tertiary}
         />
         <TouchableOpacity style={styles.searchIconContainer} onPress={onPress}>
           <Icon

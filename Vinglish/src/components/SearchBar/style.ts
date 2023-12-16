@@ -11,6 +11,7 @@ export const styles = StyleSheet.create({
   searchIcon: {
     position: 'absolute',
     right: 20,
+    padding: 10,
   },
   searchIconContainer: {
     display: 'flex',
@@ -25,6 +26,6 @@ export const styles = StyleSheet.create({
     position: 'relative',
     borderRadius: 50,
     paddingLeft: 20,
+    color: COLORS.action.tertiary,
   },
-  inputText: {},
 });

@@ -18,27 +18,26 @@ export const styles = StyleSheet.create({
     borderRadius: 8,
     marginInline: 20,
   },
-  // inputQuery: {
-  //   textAlign: 'center',
-  //   fontFamily: DefaultFontFamily,
-  //   fontSize: FONTSIZES.subheading,
-  // },
   phonetic: {
     fontStyle: 'italic',
   },
   definitionContainer: {
-    // backgroundColor: COLORS.tertiary,
     padding: 5,
     color: COLORS.text.primary,
     borderRadius: 8,
   },
+  partOfSpeech: {
+    color: COLORS.action.tertiary,
+  },
   definition: {
     fontSize: FONTSIZES.lg,
     fontWeight: FONTWEIGHTS.regular,
+    color: COLORS.action.tertiary,
   },
   example: {
     fontSize: FONTSIZES.lg,
     fontWeight: FONTWEIGHTS.regular,
+    color: COLORS.action.tertiary,
   },
   synonym: {
     marginLeft: 7,

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Image, Text, ScrollView, TouchableOpacity} from 'react-native';
+import SoundPlayer from 'react-native-sound-player';
 import axios from 'axios';
 import ScreenWrapper from '../../components/ScreenWrapper';
 import SearchBarComponent from '../../components/SearchBar';
@@ -7,7 +8,6 @@ import {styles} from './style';
 import {PageHeader} from '../../components/PageHeader';
 import Spacer from '../../components/Spacer';
 import {DictionaryData} from '../../types/dictionary';
-import Sound from 'react-native-sound';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {FONTSIZES} from '../../themes/font';
 import {COLORS} from '../../themes/colors';
@@ -17,6 +17,7 @@ const Dictionary = () => {
   const [wordData, setWordData] = useState<DictionaryData>([]);
   const [error, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [pronunciation, setPronounciation] = useState('');
 
   const dictionaryApiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${inputQuery}`;
 
@@ -33,37 +34,34 @@ const Dictionary = () => {
         });
   }
 
+  console.log(wordData);
+
   useEffect(() => {
     if (inputQuery === '') {
       setWordData([]);
     }
   }, [inputQuery]);
 
-  // Sound && Sound.setCategory('Playback');
-
-  // const ding = new Sound(
-  //   'https://api.dictionaryapi.dev/media/pronunciations/en/gentle-us.mp3',
-  //   Sound.MAIN_BUNDLE,
-  //   error => {
-  //     if (error) {
-  //       console.log('error');
-  //       return;
-  //     }
-  //     console.log('duration: ');
-  //   },
-  // );
-
-  console.log(wordData);
+  useEffect(() => {
+    wordData.length !== 0 &&
+      wordData.map(data => {
+        const audioPronounciation = data.phonetics.filter(
+          item => item.audio && item.audio.includes('us.mp3'),
+        );
+        console.log(audioPronounciation);
+        setPronounciation(audioPronounciation[0].audio);
+      });
+  });
 
   const handlePlay = () => {
-    // ding.play(success => {
-    //   if (success) {
-    //     console.log('success');
-    //   } else {
-    //     console.log('error');
-    //   }
-    // });
+    try {
+      SoundPlayer.playUrl(pronunciation);
+    } catch (e) {
+      console.log('cannot play the sound', e);
+    }
   };
+
+  console.log(inputQuery);
 
   return (
     <PageHeader title="Dictionary" variant="PRIMARY">
@@ -71,7 +69,7 @@ const Dictionary = () => {
         <ScrollView>
           <View style={styles.searchContainer}>
             <SearchBarComponent
-              onChange={value => setInputQuery(value)}
+              onChange={setInputQuery}
               value={inputQuery}
               placeholder="Search your word..."
               onPress={getData}
@@ -85,9 +83,9 @@ const Dictionary = () => {
             ) : (
               <>
                 <View>
-                  {wordData.map(data => {
+                  {wordData.map((data, index) => {
                     return (
-                      <View key={data.phonetic}>
+                      <View key={index}>
                         <View style={styles.dataContainer}>
                           {/* <Text style={styles.inputQuery}>{inputQuery}</Text> */}
                           <Text style={styles.phonetic}>{data.phonetic}</Text>
@@ -95,34 +93,39 @@ const Dictionary = () => {
                             return (
                               <View key={index}>
                                 <Spacer space={18} />
-                                <Text>{`Parts of speech: ${meaning.partOfSpeech}`}</Text>
+                                <Text
+                                  style={
+                                    styles.partOfSpeech
+                                  }>{`Parts of speech: ${meaning.partOfSpeech}`}</Text>
                                 <TouchableOpacity onPress={handlePlay}>
                                   <Icon
-                                    name="audio"
-                                    size={FONTSIZES.lg}
-                                    color={COLORS.tertiary}
+                                    name="volume-up"
+                                    size={FONTSIZES.xl}
+                                    color={COLORS.action.tertiary}
                                   />
                                 </TouchableOpacity>
                                 <Spacer space={12} />
-                                {meaning.definitions.map(definition => {
-                                  return (
-                                    <View
-                                      style={styles.definitionContainer}
-                                      key={definition.example}>
-                                      <Text
-                                        style={
-                                          styles.definition
-                                        }>{`Definition: ${definition.definition}`}</Text>
-                                      <Spacer />
-                                      {definition.example && (
+                                {meaning.definitions.map(
+                                  (definition, index) => {
+                                    return (
+                                      <View
+                                        style={styles.definitionContainer}
+                                        key={index}>
                                         <Text
                                           style={
-                                            styles.example
-                                          }>{`Example: ${definition.example}`}</Text>
-                                      )}
-                                    </View>
-                                  );
-                                })}
+                                            styles.definition
+                                          }>{`Definition: ${definition.definition}`}</Text>
+                                        <Spacer />
+                                        {definition.example && (
+                                          <Text
+                                            style={
+                                              styles.example
+                                            }>{`Example: ${definition.example}`}</Text>
+                                        )}
+                                      </View>
+                                    );
+                                  },
+                                )}
                                 {meaning.synonyms.length !== 0 && (
                                   <Text
                                     style={[
