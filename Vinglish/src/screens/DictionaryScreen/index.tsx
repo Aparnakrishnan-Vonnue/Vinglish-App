@@ -1,5 +1,13 @@
 import React, {useEffect, useState} from 'react';
-import {View, Image, Text, ScrollView, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Image,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  StatusBar,
+  TextInput,
+} from 'react-native';
 import SoundPlayer from 'react-native-sound-player';
 import axios from 'axios';
 import ScreenWrapper from '../../components/ScreenWrapper';
@@ -11,6 +19,7 @@ import {DictionaryData} from '../../types/dictionary';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {FONTSIZES} from '../../themes/font';
 import {COLORS} from '../../themes/colors';
+import LottieView from 'lottie-react-native';
 
 const Dictionary = () => {
   const [inputQuery, setInputQuery] = useState('');
@@ -34,8 +43,6 @@ const Dictionary = () => {
         });
   }
 
-  console.log(wordData);
-
   useEffect(() => {
     if (inputQuery === '') {
       setWordData([]);
@@ -48,7 +55,6 @@ const Dictionary = () => {
         const audioPronounciation = data.phonetics.filter(
           item => item.audio && item.audio.includes('us.mp3'),
         );
-        console.log(audioPronounciation);
         setPronounciation(audioPronounciation[0].audio);
       });
   });
@@ -61,10 +67,9 @@ const Dictionary = () => {
     }
   };
 
-  console.log(inputQuery);
-
   return (
     <PageHeader title="Dictionary" variant="PRIMARY">
+      <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
       <ScreenWrapper>
         <ScrollView>
           <View style={styles.searchContainer}>
@@ -80,6 +85,14 @@ const Dictionary = () => {
                 alt="preview"
                 style={styles.image}
               />
+            ) : wordData.length === 0 ? (
+              <>
+                <LottieView
+                  source={require('../../assets/lotties/loading.json')}
+                  autoPlay
+                  loop
+                />
+              </>
             ) : (
               <>
                 <View>
@@ -87,8 +100,14 @@ const Dictionary = () => {
                     return (
                       <View key={index}>
                         <View style={styles.dataContainer}>
-                          {/* <Text style={styles.inputQuery}>{inputQuery}</Text> */}
                           <Text style={styles.phonetic}>{data.phonetic}</Text>
+                          <TouchableOpacity onPress={handlePlay}>
+                            <Icon
+                              name="volume-up"
+                              size={FONTSIZES.xl}
+                              color={COLORS.action.tertiary}
+                            />
+                          </TouchableOpacity>
                           {data?.meanings.map((meaning, index) => {
                             return (
                               <View key={index}>
@@ -97,13 +116,6 @@ const Dictionary = () => {
                                   style={
                                     styles.partOfSpeech
                                   }>{`Parts of speech: ${meaning.partOfSpeech}`}</Text>
-                                <TouchableOpacity onPress={handlePlay}>
-                                  <Icon
-                                    name="volume-up"
-                                    size={FONTSIZES.xl}
-                                    color={COLORS.action.tertiary}
-                                  />
-                                </TouchableOpacity>
                                 <Spacer space={12} />
                                 {meaning.definitions.map(
                                   (definition, index) => {
@@ -133,6 +145,7 @@ const Dictionary = () => {
                                       styles.synonym,
                                     ]}>{`Synonyms: ${meaning.synonyms}`}</Text>
                                 )}
+                                <Spacer space={30} />
                               </View>
                             );
                           })}
