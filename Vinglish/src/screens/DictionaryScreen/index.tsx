@@ -20,6 +20,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {FONTSIZES} from '../../themes/font';
 import {COLORS} from '../../themes/colors';
 import LottieView from 'lottie-react-native';
+import AwesomeLoading from 'react-native-awesome-loading';
 
 const Dictionary = () => {
   const [inputQuery, setInputQuery] = useState('');
@@ -27,19 +28,23 @@ const Dictionary = () => {
   const [error, setIsError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [pronunciation, setPronounciation] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const dictionaryApiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${inputQuery}`;
 
   function getData() {
+    setIsLoading(true);
     inputQuery &&
       axios
         .get(dictionaryApiUrl)
         .then(response => {
           setWordData(response.data);
+          setIsLoading(false);
         })
         .catch(error => {
           setIsError(true);
           setErrorMessage(error.response?.data?.title);
+          setIsLoading(false);
         });
   }
 
@@ -79,7 +84,17 @@ const Dictionary = () => {
               placeholder="Search your word..."
               onPress={getData}
             />
-            {wordData.length === 0 || inputQuery === '' ? (
+            {isLoading && (
+              <View>
+                <AwesomeLoading
+                  indicatorId={8}
+                  size={50}
+                  isActive={true}
+                  text="loading"
+                />
+              </View>
+            )}
+            {wordData.length === 0 || (inputQuery === '' && !isLoading) ? (
               <Image
                 source={require('../../assets/images/preview.jpg')}
                 alt="preview"
