@@ -1,16 +1,33 @@
 import {StyleSheet} from 'react-native';
 import {COLORS} from '../../themes/colors';
-import {FONTSIZES, FONTWEIGHTS} from '../../themes/font';
+import {
+  DefaultSecondaryFontFamily,
+  FONTSIZES,
+  FONTWEIGHTS,
+} from '../../themes/font';
 
 export const styles = StyleSheet.create({
   searchContainer: {
     paddingVertical: 12,
   },
+  imageContainer: {
+    flexDirection: 'column-reverse',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   image: {
     width: '100%',
     height: 300,
-    opacity: 0.3,
-    marginTop: 180,
+    opacity: 0.1,
+    marginTop: 100,
+  },
+  errorMessage: {
+    fontSize: FONTSIZES.heading,
+    color: COLORS.text.error,
+    opacity: 0.2,
+    fontFamily: DefaultSecondaryFontFamily,
+    fontWeight: FONTWEIGHTS.semibold,
+    textAlign: 'center',
   },
   dataContainer: {
     marginTop: 30,
@@ -41,5 +58,11 @@ export const styles = StyleSheet.create({
   },
   synonym: {
     marginLeft: 7,
+  },
+  activityIndicator: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 500,
   },
 });
