@@ -32,6 +32,7 @@ const Dictionary = () => {
 
   function getData() {
     setIsLoading(true);
+    setIsError(false);
     inputQuery &&
       axios
         .get(dictionaryApiUrl)
