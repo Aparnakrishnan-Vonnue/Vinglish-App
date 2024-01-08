@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
   disabledButton: {
     backgroundColor: COLORS.action.tertiary,
     color: COLORS.text.primary,
-    opacity: 0.5,
+    opacity: 0.2,
   },
 
   //Button text styles

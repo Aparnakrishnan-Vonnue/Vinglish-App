@@ -121,6 +121,7 @@ const Dictionary = () => {
                                   name="volume-up"
                                   size={FONTSIZES.xl}
                                   color={COLORS.action.tertiary}
+                                  style={styles.audioIcon}
                                 />
                               </TouchableOpacity>
                             )}
