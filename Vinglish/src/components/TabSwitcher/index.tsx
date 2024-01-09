@@ -1,16 +1,35 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './style';
+import {GestureResponderEvent} from 'react-native-modal';
 
-export const TabSwitcher = () => {
+interface TabSwitcherProps {
+  tabTextOne: string;
+  tabTextTwo: string;
+  isActive: boolean;
+  onTabOnePress: (e: GestureResponderEvent) => void;
+  onTabTwoPress: (e: GestureResponderEvent) => void;
+}
+
+export const TabSwitcher = ({
+  tabTextOne,
+  tabTextTwo,
+  isActive,
+  onTabOnePress,
+  onTabTwoPress,
+}: TabSwitcherProps) => {
   return (
     <View style={styles.container}>
-      <View style={styles.tab}>
-        <Text style={styles.tabText}>Yes</Text>
-      </View>
-      <View style={styles.tab}>
-        <Text style={styles.tabText}>No</Text>
-      </View>
+      <TouchableOpacity
+        style={isActive ? [styles.tab, styles.activeTab] : styles.tab}
+        onPress={onTabOnePress}>
+        <Text style={styles.tabText}>{tabTextOne}</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={!isActive ? [styles.tab, styles.activeTab] : styles.tab}
+        onPress={onTabTwoPress}>
+        <Text style={styles.tabText}>{tabTextTwo}</Text>
+      </TouchableOpacity>
     </View>
   );
 };

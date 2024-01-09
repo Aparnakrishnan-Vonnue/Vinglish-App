@@ -89,7 +89,7 @@ const Dictionary = () => {
                 <ActivityIndicator size="large" color={COLORS.primary} />
               </View>
             )}
-            {isError && (
+            {isError && inputQuery !== '' && (
               <View style={styles.imageContainer}>
                 <Text style={styles.errorMessage}>{errorMessage} !</Text>
                 <Image

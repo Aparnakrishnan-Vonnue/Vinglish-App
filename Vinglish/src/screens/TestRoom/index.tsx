@@ -8,23 +8,22 @@ import Spacer from '../../components/Spacer';
 import {dictionary} from '../../data';
 import {COLORS} from '../../themes/colors';
 import BottomSheet from '../../components/BottomSheet';
-import {areWordsPresent} from '../../utils';
 import {TabSwitcher} from '../../components/TabSwitcher';
+import {Response} from './components/Response';
 
 const TestRoom = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [word, setWord] = useState('');
   const [answer, setAnswer] = useState('');
-  const [inputAnswer, setInputAnswer] = useState('');
+  // const [inputAnswer, setInputAnswer] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [meaning, setMeaning] = useState('');
+  const [isTabOneActive, setIsTabOneActive] = useState(false);
 
   const generateRandomWord = () => {
     setWord(dictionary[Math.floor(Math.random() * dictionary.length)].word);
-    setMeaning(
-      dictionary[Math.floor(Math.random() * dictionary.length)].meaning,
-    );
   };
+  const resultedData = dictionary.filter(data => word === data.word);
 
   const handleClick = () => {
     setIsClicked(!isClicked);
@@ -32,8 +31,9 @@ const TestRoom = () => {
   };
 
   const handleSubmit = () => {
-    setInputAnswer(answer);
+    // setInputAnswer(answer);
     setIsModalOpen(true);
+    setMeaning(resultedData[0]?.meaning);
   };
 
   return (
@@ -80,11 +80,34 @@ const TestRoom = () => {
       </ScreenWrapper>
       <BottomSheet isOpen={isModalOpen} setIsOpen={setIsModalOpen}>
         <View>
-          <Text>Is your answer similar to the provided answer?</Text>
+          <Text style={[styles.question, styles.boldText]}>
+            Is your answer similar to the provided answer?
+          </Text>
           <Spacer />
-          <Text>{`Provided answer: ${meaning}`}</Text>
+          <Text style={styles.question}>
+            <Text style={[styles.question, styles.boldText]}>
+              Provided Answer:{' '}
+            </Text>
+            {meaning}
+          </Text>
           <Spacer space={20} />
-          <TabSwitcher />
+          <TabSwitcher
+            tabTextOne="YES"
+            tabTextTwo="NO"
+            isActive={isTabOneActive}
+            onTabOnePress={() => setIsTabOneActive(true)}
+            onTabTwoPress={() => setIsTabOneActive(false)}
+          />
+          <Spacer />
+          {isTabOneActive ? (
+            <View>
+              <Response title="Congratulations" />
+            </View>
+          ) : (
+            <View>
+              <Response title="Try Again!" />
+            </View>
+          )}
         </View>
       </BottomSheet>
     </PageHeader>

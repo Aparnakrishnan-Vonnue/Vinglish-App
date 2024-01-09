@@ -31,4 +31,7 @@ export const styles = StyleSheet.create({
     padding: 80,
     borderRadius: 10,
   },
+  boldText: {
+    fontWeight: FONTWEIGHTS.bold,
+  },
 });

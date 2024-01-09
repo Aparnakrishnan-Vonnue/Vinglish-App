@@ -51,7 +51,9 @@ const HomeScreen = () => {
 
   return (
     <ScreenWrapper style={styles.screenWrapper}>
-      <View style={styles.imageContainer}>
+      <Text style={styles.headerTitle}>LINGOMATE</Text>
+      <Spacer />
+      <View>
         <Image
           source={require('../../assets/images/books.jpg')}
           style={styles.image}
