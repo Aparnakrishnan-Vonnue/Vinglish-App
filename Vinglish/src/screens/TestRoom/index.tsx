@@ -1,115 +1,151 @@
-import React, {useState} from 'react';
-import {Text, TextInput, View} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {PageHeader} from '../../components/PageHeader';
 import Button from '../../components/Button';
 import {styles} from './style';
 import ScreenWrapper from '../../components/ScreenWrapper';
 import Spacer from '../../components/Spacer';
 import {dictionary} from '../../data';
-import {COLORS} from '../../themes/colors';
-import BottomSheet from '../../components/BottomSheet';
-import {TabSwitcher} from '../../components/TabSwitcher';
-import {Response} from './components/Response';
 
 const TestRoom = () => {
   const [isClicked, setIsClicked] = useState(false);
-  const [word, setWord] = useState('');
-  const [answer, setAnswer] = useState('');
-  // const [inputAnswer, setInputAnswer] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [meaning, setMeaning] = useState('');
-  const [isTabOneActive, setIsTabOneActive] = useState(false);
+  const [testObj, setTestObj] = useState<any>({
+    meaning: '',
+    word: '',
+    options: [],
+    isCorrect: false,
+    isWrong: false,
+    score: 0,
+    showScore: false,
+  });
 
   const generateRandomWord = () => {
-    setWord(dictionary[Math.floor(Math.random() * dictionary.length)].word);
+    let newWord =
+      dictionary[Math.floor(Math.random() * dictionary.length)].word;
+    const resultedData = dictionary.find(data => newWord === data.word);
+
+    if (resultedData) {
+      setTestObj({
+        ...testObj,
+        meaning: resultedData.meaning,
+        word: newWord,
+        score: testObj.score + 1,
+      });
+    } else {
+      return 'error';
+    }
   };
-  const resultedData = dictionary.filter(data => word === data.word);
 
   const handleClick = () => {
     setIsClicked(!isClicked);
     generateRandomWord();
   };
 
-  const handleSubmit = () => {
-    // setInputAnswer(answer);
-    setIsModalOpen(true);
-    setMeaning(resultedData[0]?.meaning);
+  const getOptions = () => {
+    const allMeanings = dictionary.map(word => word.meaning);
+    const shuffledMeanings = shuffleArray(allMeanings);
+    const randomOptions = shuffledMeanings.slice(0, 3);
+    const newOptions = [...randomOptions, testObj.meaning];
+    const shuffledOptions = shuffleArray(newOptions);
+    setTestObj({...testObj, options: shuffledOptions});
+  };
+
+  useEffect(() => {
+    getOptions();
+  }, [testObj.meaning]);
+
+  const shuffleArray = (array: string[]) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
+
+  const handleAnswer = (selectedAnswer: string) => {
+    if (testObj.meaning === selectedAnswer) {
+      setTestObj({
+        ...testObj,
+        isCorrect: true,
+        answer: selectedAnswer,
+      });
+    } else {
+      setTestObj({
+        ...testObj,
+        isWrong: true,
+        answer: selectedAnswer,
+      });
+    }
   };
 
   return (
     <PageHeader title="Test Room" variant="PRIMARY">
-      <ScreenWrapper>
-        <View>
-          {isClicked && (
-            <View style={styles.container}>
-              <View style={styles.testContainer}>
-                <View style={styles.questionContainer}>
-                  <Text style={styles.question}>
-                    What is the meaning of the word "
-                    <Text style={[styles.question, styles.word]}>{word}</Text>"
-                    ?
-                  </Text>
+      <ScrollView>
+        <ScreenWrapper>
+          <View>
+            {isClicked ? (
+              <View style={styles.container}>
+                <View style={styles.testContainer}>
+                  <View style={styles.questionContainer}>
+                    <Text style={styles.question}>
+                      What is the meaning of the word "
+                      <Text style={[styles.question, styles.word]}>
+                        {testObj.word}
+                      </Text>
+                      " ?
+                    </Text>
+                    <Spacer />
+                  </View>
+                  <Spacer space={20} />
+                  <View>
+                    {testObj.options?.map((item: string, index: number) => {
+                      return (
+                        <TouchableOpacity
+                          key={index}
+                          onPress={() => handleAnswer(item)}
+                          style={[
+                            styles.optionConainer,
+                            testObj.isCorrect &&
+                              item === testObj.meaning &&
+                              styles.rightOptionContainer,
+                            testObj.isWrong &&
+                              item === testObj.answer &&
+                              styles.wrongOptionContainer,
+                          ]}>
+                          <Text style={styles.optionText}>{item}</Text>
+                        </TouchableOpacity>
+                      );
+                    })}
+                  </View>
                   <Spacer />
                 </View>
-                <Spacer space={20} />
-                <TextInput
-                  style={styles.answerInput}
-                  placeholder="Type your answer here..."
-                  placeholderTextColor={COLORS.border.primary}
-                  onChangeText={setAnswer}
-                />
-                <Spacer />
               </View>
-            </View>
-          )}
-          <Spacer space={30} />
-          {!isClicked ? (
-            <Button
-              label="Generate Question"
-              variant="PRIMARY"
-              onClick={handleClick}
-            />
-          ) : (
-            <Button
-              variant={answer !== '' ? 'PRIMARY' : 'DISABLED'}
-              label="SUBMIT"
-              onClick={handleSubmit}
-            />
-          )}
-        </View>
-      </ScreenWrapper>
-      <BottomSheet isOpen={isModalOpen} setIsOpen={setIsModalOpen}>
-        <View>
-          <Text style={[styles.question, styles.boldText]}>
-            Is your answer similar to the provided answer?
-          </Text>
-          <Spacer />
-          <Text style={styles.question}>
-            <Text style={[styles.question, styles.boldText]}>
-              Provided Answer:{' '}
-            </Text>
-            {meaning}
-          </Text>
-          <Spacer space={20} />
-          <TabSwitcher
-            tabTextOne="YES"
-            tabTextTwo="NO"
-            isActive={isTabOneActive}
-            onTabOnePress={() => setIsTabOneActive(true)}
-            onTabTwoPress={() => setIsTabOneActive(false)}
+            ) : (
+              <Image
+                source={require('../../assets/images/quiz.jpg')}
+                style={styles.vectorImage}
+              />
+            )}
+            <Spacer space={30} />
+          </View>
+        </ScreenWrapper>
+      </ScrollView>
+      <View style={styles.paddingHorizontal}>
+        {!isClicked ? (
+          <Button
+            label="Generate Question"
+            variant="PRIMARY"
+            onClick={handleClick}
           />
-          <Spacer />
-          {isTabOneActive ? (
-            <View>
-              <Response title="Congratulations" />
-            </View>
-          ) : (
-            <View>
-              <Response title="Try Again!" />
-            </View>
-          )}
-        </View>
-      </BottomSheet>
+        ) : (
+          <Button
+            variant={testObj.meaning !== '' ? 'PRIMARY' : 'DISABLED'}
+            label="NEXT"
+            onClick={() => console.log('')}
+          />
+        )}
+      </View>
+      <Spacer space={20} />
     </PageHeader>
   );
 };

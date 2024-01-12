@@ -4,7 +4,7 @@ import {FONTSIZES, FONTWEIGHTS} from '../../themes/font';
 
 export const styles = StyleSheet.create({
   container: {
-    height: 300,
+    height: 600,
     backgroundColor: COLORS.action.secondary,
     marginVertical: 50,
   },
@@ -25,13 +25,32 @@ export const styles = StyleSheet.create({
     color: COLORS.text.primary,
     fontWeight: FONTWEIGHTS.semibold,
   },
-  answerInput: {
-    borderColor: COLORS.border.secondary,
-    borderWidth: 2,
-    padding: 80,
-    borderRadius: 10,
-  },
   boldText: {
     fontWeight: FONTWEIGHTS.bold,
+  },
+  optionConainer: {
+    marginTop: 15,
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: COLORS.action.primary,
+  },
+  rightOptionContainer: {
+    backgroundColor: COLORS.action.success,
+  },
+  wrongOptionContainer: {
+    backgroundColor: COLORS.action.error,
+  },
+  optionText: {
+    color: COLORS.text.secondary,
+    fontSize: FONTSIZES.md,
+  },
+  paddingHorizontal: {
+    paddingHorizontal: 20,
+  },
+  vectorImage: {
+    width: '100%',
+    height: 400,
+    opacity: 0.2,
+    marginTop: 100,
   },
 });

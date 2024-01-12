@@ -7,7 +7,7 @@ export const COLORS = {
     secondary: '#FFFFFF',
     tertiary: '#808080',
     quarternary: '#96EFFF',
-    success: '#16FF00',
+    success: '#013220',
     error: '#FE0000',
   },
   text: {
