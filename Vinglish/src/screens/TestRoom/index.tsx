@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import ConfettiCannon from 'react-native-confetti-cannon';
 import {Image, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {PageHeader} from '../../components/PageHeader';
 import Button from '../../components/Button';
@@ -9,13 +10,15 @@ import {dictionary} from '../../data';
 
 const TestRoom = () => {
   const [isClicked, setIsClicked] = useState(false);
+  const [isOptionDisabled, setIsOptionDisabled] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
+
   const [testObj, setTestObj] = useState<any>({
     meaning: '',
     word: '',
     options: [],
-    isCorrect: false,
-    isWrong: false,
     score: 0,
+    selectedOption: '',
     showScore: false,
   });
 
@@ -23,7 +26,6 @@ const TestRoom = () => {
     let newWord =
       dictionary[Math.floor(Math.random() * dictionary.length)].word;
     const resultedData = dictionary.find(data => newWord === data.word);
-
     if (resultedData) {
       setTestObj({
         ...testObj,
@@ -37,7 +39,10 @@ const TestRoom = () => {
   };
 
   const handleClick = () => {
-    setIsClicked(!isClicked);
+    setTestObj({...testObj, selectedOption: ''});
+    setIsCorrect(false);
+    setIsOptionDisabled(false);
+    setIsClicked(true);
     generateRandomWord();
   };
 
@@ -45,9 +50,16 @@ const TestRoom = () => {
     const allMeanings = dictionary.map(word => word.meaning);
     const shuffledMeanings = shuffleArray(allMeanings);
     const randomOptions = shuffledMeanings.slice(0, 3);
+    if (randomOptions.includes(testObj.meaning)) {
+      shuffleArray(randomOptions);
+    }
     const newOptions = [...randomOptions, testObj.meaning];
     const shuffledOptions = shuffleArray(newOptions);
     setTestObj({...testObj, options: shuffledOptions});
+  };
+
+  const isGoBack = () => {
+    setIsClicked(false);
   };
 
   useEffect(() => {
@@ -63,23 +75,15 @@ const TestRoom = () => {
   };
 
   const handleAnswer = (selectedAnswer: string) => {
-    if (testObj.meaning === selectedAnswer) {
-      setTestObj({
-        ...testObj,
-        isCorrect: true,
-        answer: selectedAnswer,
-      });
-    } else {
-      setTestObj({
-        ...testObj,
-        isWrong: true,
-        answer: selectedAnswer,
-      });
+    setIsOptionDisabled(true);
+    setTestObj({...testObj, selectedOption: selectedAnswer});
+    if (selectedAnswer === testObj.meaning) {
+      setIsCorrect(true);
     }
   };
 
   return (
-    <PageHeader title="Test Room" variant="PRIMARY">
+    <PageHeader title="Test Room" variant="PRIMARY" goBack={isGoBack}>
       <ScrollView>
         <ScreenWrapper>
           <View>
@@ -101,16 +105,22 @@ const TestRoom = () => {
                     {testObj.options?.map((item: string, index: number) => {
                       return (
                         <TouchableOpacity
+                          disabled={isOptionDisabled}
                           key={index}
                           onPress={() => handleAnswer(item)}
                           style={[
                             styles.optionConainer,
-                            testObj.isCorrect &&
+                            isCorrect &&
                               item === testObj.meaning &&
                               styles.rightOptionContainer,
-                            testObj.isWrong &&
-                              item === testObj.answer &&
+                            !isCorrect &&
+                              isOptionDisabled &&
+                              testObj.selectedOption === item &&
                               styles.wrongOptionContainer,
+                            !isCorrect &&
+                              isOptionDisabled &&
+                              item === testObj.meaning &&
+                              styles.rightOptionContainer,
                           ]}>
                           <Text style={styles.optionText}>{item}</Text>
                         </TouchableOpacity>
@@ -141,10 +151,13 @@ const TestRoom = () => {
           <Button
             variant={testObj.meaning !== '' ? 'PRIMARY' : 'DISABLED'}
             label="NEXT"
-            onClick={() => console.log('')}
+            onClick={handleClick}
           />
         )}
       </View>
+      {testObj.isCorrect && (
+        <ConfettiCannon count={200} origin={{x: -10, y: 0}} />
+      )}
       <Spacer space={20} />
     </PageHeader>
   );

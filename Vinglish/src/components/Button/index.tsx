@@ -1,6 +1,7 @@
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {ActivityIndicator, Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './styles';
+import {COLORS} from '../../themes/colors';
 
 export type ButtonVariant = 'PRIMARY' | 'SECONDARY' | 'GHOST' | 'DISABLED';
 
@@ -8,8 +9,9 @@ interface ButtonProps {
   label: string;
   variant: ButtonVariant;
   onClick: () => void;
+  isLoading?: boolean;
 }
-const Button = ({variant, label, onClick}: ButtonProps) => {
+const Button = ({variant, label, onClick, isLoading}: ButtonProps) => {
   const getButtonStyles = () => {
     switch (variant) {
       case 'PRIMARY':
@@ -43,7 +45,11 @@ const Button = ({variant, label, onClick}: ButtonProps) => {
   return (
     <TouchableOpacity style={buttonStyle} onPress={onClick}>
       <View>
-        <Text style={buttonTextStyle}>{label}</Text>
+        {isLoading ? (
+          <ActivityIndicator color={COLORS.primary} size={'small'} />
+        ) : (
+          <Text style={buttonTextStyle}>{label}</Text>
+        )}
       </View>
     </TouchableOpacity>
   );

@@ -17,6 +17,7 @@ interface PageHeaderProps {
   leadingIcon?: 'back' | 'close';
   onLeadingIconClick?: () => void;
   variant?: keyof typeof PageHeaderVariant;
+  goBack?: () => void;
 }
 
 export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = ({
@@ -25,6 +26,7 @@ export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = ({
   leadingIcon = 'back',
   onLeadingIconClick,
   children,
+  goBack,
 }) => {
   const navigate = useNavigation();
   const insets = useSafeAreaInsets();
@@ -47,6 +49,7 @@ export const PageHeader: React.FC<PropsWithChildren<PageHeaderProps>> = ({
     return <Icon name="close" size={FONTSIZES.xl} color={COLORS.tertiary} />;
   };
   const onLeadingButtonClick = () => {
+    goBack?.();
     return onLeadingIconClick ? onLeadingIconClick : navigate.goBack();
   };
   return (
