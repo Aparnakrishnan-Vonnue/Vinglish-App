@@ -51,7 +51,7 @@ const HomeScreen = () => {
 
   return (
     <ScreenWrapper style={styles.screenWrapper}>
-      <Text style={styles.headerTitle}>LINGOMATE</Text>
+      <Text style={styles.headerTitle}>VINGLISH</Text>
       <Spacer />
       <View>
         <Image

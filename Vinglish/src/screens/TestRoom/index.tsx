@@ -50,9 +50,6 @@ const TestRoom = () => {
     const allMeanings = dictionary.map(word => word.meaning);
     const shuffledMeanings = shuffleArray(allMeanings);
     const randomOptions = shuffledMeanings.slice(0, 3);
-    if (randomOptions.includes(testObj.meaning)) {
-      shuffleArray(randomOptions);
-    }
     const newOptions = [...randomOptions, testObj.meaning];
     const shuffledOptions = shuffleArray(newOptions);
     setTestObj({...testObj, options: shuffledOptions});
@@ -155,9 +152,7 @@ const TestRoom = () => {
           />
         )}
       </View>
-      {testObj.isCorrect && (
-        <ConfettiCannon count={200} origin={{x: -10, y: 0}} />
-      )}
+      {isCorrect && <ConfettiCannon count={200} origin={{x: -10, y: 0}} />}
       <Spacer space={20} />
     </PageHeader>
   );
