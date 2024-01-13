@@ -14,14 +14,12 @@ export const ModalPopup = ({
   children,
 }: ModalPopupProps) => {
   return (
-    <View>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={isVisible}
-        onRequestClose={() => setIsVisible}>
-        <View style={styles.modalContainer}>{children}</View>
-      </Modal>
-    </View>
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={isVisible}
+      onRequestClose={() => setIsVisible}>
+      <View style={styles.modalContainer}>{children}</View>
+    </Modal>
   );
 };

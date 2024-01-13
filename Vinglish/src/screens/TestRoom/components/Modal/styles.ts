@@ -11,7 +11,8 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     marginHorizontal: 50,
     marginVertical: 300,
-    borderColor: COLORS.border.primary,
+    borderColor: COLORS.tertiary,
     borderRadius: 10,
+    elevation: 10,
   },
 });

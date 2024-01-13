@@ -20,7 +20,6 @@ const TestRoom = () => {
     options: [],
     score: 0,
     selectedOption: '',
-    showScore: false,
   });
 
   const generateRandomWord = () => {
@@ -90,7 +89,7 @@ const TestRoom = () => {
       setIsModalVisible(!isModalVisible);
     }
   };
-  console.log(testObj.score);
+
   return (
     <PageHeader title="Test Room" variant="PRIMARY" goBack={isGoBack}>
       <ScrollView>
