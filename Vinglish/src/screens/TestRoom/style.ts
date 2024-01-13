@@ -53,4 +53,22 @@ export const styles = StyleSheet.create({
     opacity: 0.2,
     marginTop: 100,
   },
+  modalOpenContainer: {
+    opacity: 0.1,
+  },
+  scoreText: {
+    fontSize: FONTSIZES.lg,
+    color: COLORS.text.primary,
+  },
+  score: {
+    fontWeight: FONTWEIGHTS.bold,
+  },
+  tryAgainButton: {
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 8,
+    backgroundColor: COLORS.action.quarternary,
+    borderColor: COLORS.action.quarternary,
+  },
+  tryAgainText: {color: COLORS.text.primary, fontSize: FONTSIZES.md},
 });

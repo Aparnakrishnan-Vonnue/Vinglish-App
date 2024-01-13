@@ -7,12 +7,13 @@ import {styles} from './style';
 import ScreenWrapper from '../../components/ScreenWrapper';
 import Spacer from '../../components/Spacer';
 import {dictionary} from '../../data';
+import {ModalPopup} from './components/Modal';
 
 const TestRoom = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [isOptionDisabled, setIsOptionDisabled] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
-
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [testObj, setTestObj] = useState<any>({
     meaning: '',
     word: '',
@@ -31,7 +32,6 @@ const TestRoom = () => {
         ...testObj,
         meaning: resultedData.meaning,
         word: newWord,
-        score: testObj.score + 1,
       });
     } else {
       return 'error';
@@ -49,7 +49,10 @@ const TestRoom = () => {
   const getOptions = () => {
     const allMeanings = dictionary.map(word => word.meaning);
     const shuffledMeanings = shuffleArray(allMeanings);
-    const randomOptions = shuffledMeanings.slice(0, 3);
+    const filteredMeanings = shuffledMeanings.filter(
+      meaning => meaning !== testObj.meaning,
+    );
+    const randomOptions = filteredMeanings.slice(0, 3);
     const newOptions = [...randomOptions, testObj.meaning];
     const shuffledOptions = shuffleArray(newOptions);
     setTestObj({...testObj, options: shuffledOptions});
@@ -71,21 +74,34 @@ const TestRoom = () => {
     return array;
   };
 
+  useEffect(() => {
+    if (testObj.score === 10) {
+      setIsModalVisible(true);
+    }
+  }, [testObj.score]);
+
   const handleAnswer = (selectedAnswer: string) => {
     setIsOptionDisabled(true);
     setTestObj({...testObj, selectedOption: selectedAnswer});
     if (selectedAnswer === testObj.meaning) {
       setIsCorrect(true);
+      setTestObj({...testObj, score: testObj.score + 1});
+    } else {
+      setIsModalVisible(!isModalVisible);
     }
   };
-
+  console.log(testObj.score);
   return (
     <PageHeader title="Test Room" variant="PRIMARY" goBack={isGoBack}>
       <ScrollView>
         <ScreenWrapper>
           <View>
             {isClicked ? (
-              <View style={styles.container}>
+              <View
+                style={[
+                  styles.container,
+                  isModalVisible && styles.modalOpenContainer,
+                ]}>
                 <View style={styles.testContainer}>
                   <View style={styles.questionContainer}>
                     <Text style={styles.question}>
@@ -152,8 +168,59 @@ const TestRoom = () => {
           />
         )}
       </View>
-      {isCorrect && <ConfettiCannon count={200} origin={{x: -10, y: 0}} />}
       <Spacer space={20} />
+      <ModalPopup isVisible={isModalVisible} setIsVisible={setIsModalVisible}>
+        {testObj.score === 10 ? (
+          <View>
+            <Text style={styles.score}>Congratulations 🎉</Text>
+            <Text style={styles.scoreText}>You have nailed it!</Text>
+          </View>
+        ) : (
+          <Text style={styles.scoreText}>
+            Your score is{' '}
+            <Text style={[styles.scoreText, styles.score]}>
+              {testObj.score}
+            </Text>
+          </Text>
+        )}
+        <Spacer space={20} />
+        {testObj.score < 5 ? (
+          <TouchableOpacity
+            style={styles.tryAgainButton}
+            onPress={() => {
+              setIsClicked(false);
+              setIsModalVisible(false);
+              setTestObj({...testObj, score: 0});
+            }}>
+            <Text style={styles.tryAgainText}>Try Again!</Text>
+          </TouchableOpacity>
+        ) : testObj.score < 10 && testObj.score > 5 ? (
+          <TouchableOpacity
+            style={styles.tryAgainButton}
+            onPress={() => {
+              setIsClicked(false);
+              setIsModalVisible(false);
+              setTestObj({...testObj, score: 0});
+            }}>
+            <Text style={styles.tryAgainText}>Cool! Try Again!</Text>
+          </TouchableOpacity>
+        ) : (
+          testObj.score === 10 && (
+            <TouchableOpacity
+              style={styles.tryAgainButton}
+              onPress={() => {
+                setIsClicked(false);
+                setIsModalVisible(false);
+                setTestObj({...testObj, score: 0});
+              }}>
+              <Text style={styles.tryAgainText}>Restart!</Text>
+            </TouchableOpacity>
+          )
+        )}
+      </ModalPopup>
+      {testObj.score === 10 && (
+        <ConfettiCannon count={200} origin={{x: -10, y: 0}} />
+      )}
     </PageHeader>
   );
 };
