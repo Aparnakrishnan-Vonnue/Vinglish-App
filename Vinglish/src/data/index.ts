@@ -256,6 +256,118 @@ export const dictionary = [
     usage: "'I'm not a fatalist,' she said, 'I'm a realist",
     partsOfSpeech: 'noun',
   },
+  {
+    word: 'Egoist',
+    meaning: 'a self-centred or selfish person (opposed to altruist)',
+    synonym: 'egotist, narcissist',
+    usage:
+      'They disliked this egoistic conception of man and they suspected that egoistic motives might not be sufficient to underpin morality',
+    partsOfSpeech: 'noun',
+  },
+  {
+    word: 'Stoic',
+    meaning:
+      'a person who can endure pain or hardship without showing their feelings or complaining',
+    synonyms: 'patient, uncomplaining',
+    usage:
+      'He and his pals are stoic in the face of any criticism of their team',
+    partsOfSpeech: 'noun',
+  },
+  {
+    word: 'Chauvinist',
+    meaning:
+      'a person displaying excessive or prejudiced support for their own cause or group, in particular, a man prejudiced against woman',
+    synonyms: 'sexist, male chauvinist',
+    usage: 'She now reports to a new boss, who is a chauvinist',
+    partsOfSpeech: 'noun',
+  },
+  {
+    word: 'Jingoist',
+    meaning: 'Someone who believes that their own country is always best',
+    synonyms: 'fanaticism, nationalism etc',
+    usage:
+      'He was a confirmed jingoist and would frequently speak about the dangers of Britain forming closer ties with the rest Europe',
+    partsOfSpeech: 'noun',
+  },
+  {
+    word: 'Liberal',
+    meaning:
+      "willing to respect or accept behavior or opinions different from one's own; Open to new Ideas",
+    synonyms: 'tolerant, unprejudiced',
+    usage: 'My idea of a conservative is someone who thinks taxes are too high',
+    partsOfSpeech: 'adjective',
+  },
+  {
+    word: 'Epicurean',
+    meaning:
+      'A person who developed to sensual enjoyment, especially that derived from fine food and drink',
+    synonyms: '',
+    usage: 'I have to admit to a certain amount of epicurean bigotry here',
+    partsOfSpeech: 'noun',
+  },
+  {
+    word: 'Monogamy',
+    meaning:
+      'The practise of marrying or stale of being married to one person at a time',
+    synonyms: 'celibacy, purity',
+    usage: 'Judaism has journeyed from Polygamy to strict Monogamy',
+    partsOfSpeech: 'noun',
+  },
+  {
+    word: 'Bigamy',
+    meaning:
+      'The offense of marrying someone while already married to another person',
+    synonyms: 'polygamy, polygamous',
+    usage:
+      'But marrying itself is largely a creature of legal rules precluding divorce ang prohibiting Bigamy',
+    partsOfSpeech: 'noun',
+  },
+  {
+    word: 'Misogamy',
+    meaning: 'dislike or aversion to marriage',
+    synonym: 'hatred of marriage',
+    usage:
+      'Certain birds, after years of Misogamy, took to nesting in the new quiet of the zoo',
+    partsOfSpeech: 'noun',
+  },
+  {
+    word: 'Monotheism',
+    meaning: 'Belief in the existence of one god',
+    synonyms: 'pagasm, theology ',
+    usage:
+      'Does you masonry promotes Monotheism or does it promotes Multitheism  ',
+    partsOfSpeech: 'noun',
+  },
+  {
+    word: 'Bicuspid',
+    meaning: 'having two cusps or points',
+    synonyms: 'Canine, denticle',
+    usage:
+      'A bicuspid aortic valve has only two flaps instead of three which can lead to stenosis in adulthood',
+    partsOfSpeech: 'adjective',
+  },
+  {
+    word: 'Polyglot',
+    meaning: 'Knowing or using several languages',
+    synonyms: 'linguist, wordsmith',
+    usage: 'A language translation quiz for polyglot readers',
+    partsOfSpeech: 'adjective',
+  },
+  {
+    word: 'Misanthropy',
+    meaning: 'a dislike of human kind',
+    synonyms: 'cynicism, hatred of mankind',
+    usage: 'The streak of Misanthropy in his nature',
+    partsOfSpeech: 'noun',
+  },
+  {
+    word: 'Polygamy',
+    meaning:
+      'The practice or custom of having more than one wife or husband at the same time',
+    synonyms: 'bigamy, polygyny',
+    usage: 'The practice of Polygamy was banned',
+    partsOfSpeech: 'noun',
+  },
 ];
 
 export const gameCardData = [
