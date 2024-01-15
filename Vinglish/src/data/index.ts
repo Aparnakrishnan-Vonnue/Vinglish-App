@@ -1,3 +1,5 @@
+import Hangman from '../assets/images/hangman.jpg';
+
 export const dictionary = [
   {
     word: 'Purge',
@@ -253,5 +255,18 @@ export const dictionary = [
     synonyms: 'defeatist, pessimist',
     usage: "'I'm not a fatalist,' she said, 'I'm a realist",
     partsOfSpeech: 'noun',
+  },
+];
+
+export const gameCardData = [
+  {
+    imageUrl: Hangman,
+    title: 'Hangman',
+    description:
+      'Probably one of the most popular word games for kids is the popular Hang Man. Player 1 thinks of a word and Player 2 has to guess it before they get “hung.”' +
+      '\n' +
+      'Player 1 writes spaces for letters are written on the page so they know how many letters there are in the word. Player 2 proceeds to choose a letter they think may be in the word.' +
+      '\n' +
+      'If it is correct Player 1 writes the letter down where it goes. If it is incorrect Player 1 draws part of the “hangman”. If the drawing is complete by the time Player 2 guesses, then Player 1 wins.',
   },
 ];

@@ -7,15 +7,25 @@ import {styles} from './style';
 import ScreenWrapper from '../../components/ScreenWrapper';
 import Spacer from '../../components/Spacer';
 import {dictionary} from '../../data';
-import {ModalPopup} from './components/Modal';
+import {QuizModal} from './components/Modal/QuizModal';
+import {shuffleArray} from '../../utils';
 
-const TestRoom = () => {
+type QuizObj = {
+  actualMeaning: string;
+  word: string;
+  options: string[];
+  score: number;
+  selectedOption: string;
+};
+
+const QuizRoom = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [isOptionDisabled, setIsOptionDisabled] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [testObj, setTestObj] = useState<any>({
-    meaning: '',
+  const [isNextButtonDisabled, setIsNextButtonDisabled] = useState(false);
+  const [quizObj, setQuizObj] = useState<QuizObj>({
+    actualMeaning: '',
     word: '',
     options: [],
     score: 0,
@@ -27,9 +37,9 @@ const TestRoom = () => {
       dictionary[Math.floor(Math.random() * dictionary.length)].word;
     const resultedData = dictionary.find(data => newWord === data.word);
     if (resultedData) {
-      setTestObj({
-        ...testObj,
-        meaning: resultedData.meaning,
+      setQuizObj({
+        ...quizObj,
+        actualMeaning: resultedData.meaning,
         word: newWord,
       });
     } else {
@@ -38,7 +48,10 @@ const TestRoom = () => {
   };
 
   const handleClick = () => {
-    setTestObj({...testObj, selectedOption: ''});
+    if (isNextButtonDisabled) {
+      setIsModalVisible(true);
+    }
+    setQuizObj({...quizObj, selectedOption: ''});
     setIsCorrect(false);
     setIsOptionDisabled(false);
     setIsClicked(true);
@@ -49,12 +62,12 @@ const TestRoom = () => {
     const allMeanings = dictionary.map(word => word.meaning);
     const shuffledMeanings = shuffleArray(allMeanings);
     const filteredMeanings = shuffledMeanings.filter(
-      meaning => meaning !== testObj.meaning,
+      meaning => meaning !== quizObj.actualMeaning,
     );
     const randomOptions = filteredMeanings.slice(0, 3);
-    const newOptions = [...randomOptions, testObj.meaning];
+    const newOptions = [...randomOptions, quizObj.actualMeaning];
     const shuffledOptions = shuffleArray(newOptions);
-    setTestObj({...testObj, options: shuffledOptions});
+    setQuizObj({...quizObj, options: shuffledOptions});
   };
 
   const isGoBack = () => {
@@ -63,35 +76,42 @@ const TestRoom = () => {
 
   useEffect(() => {
     getOptions();
-  }, [testObj.meaning]);
-
-  const shuffleArray = (array: string[]) => {
-    for (let i = array.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-  };
+  }, [quizObj.actualMeaning]);
 
   useEffect(() => {
-    if (testObj.score === 10) {
+    if (quizObj.score === 10) {
       setIsModalVisible(true);
     }
-  }, [testObj.score]);
+  }, [quizObj.score]);
 
   const handleAnswer = (selectedAnswer: string) => {
     setIsOptionDisabled(true);
-    setTestObj({...testObj, selectedOption: selectedAnswer});
-    if (selectedAnswer === testObj.meaning) {
+    setQuizObj({...quizObj, selectedOption: selectedAnswer});
+    if (selectedAnswer === quizObj.actualMeaning) {
       setIsCorrect(true);
-      setTestObj({...testObj, score: testObj.score + 1});
+      setQuizObj({...quizObj, score: quizObj.score + 1});
     } else {
-      setIsModalVisible(!isModalVisible);
+      setIsNextButtonDisabled(true);
+    }
+  };
+
+  const handleResult = () => {
+    setIsClicked(false);
+    setIsModalVisible(false);
+    setQuizObj({...quizObj, score: 0});
+    setIsNextButtonDisabled(false);
+  };
+
+  const generateModalText = () => {
+    if (quizObj.score < 10) {
+      return 'Try Again!';
+    } else {
+      return 'Restart';
     }
   };
 
   return (
-    <PageHeader title="Test Room" variant="PRIMARY" goBack={isGoBack}>
+    <PageHeader title="Quiz Room" variant="PRIMARY" goBack={isGoBack}>
       <ScrollView>
         <ScreenWrapper>
           <View>
@@ -106,7 +126,7 @@ const TestRoom = () => {
                     <Text style={styles.question}>
                       What is the meaning of the word "
                       <Text style={[styles.question, styles.word]}>
-                        {testObj.word}
+                        {quizObj.word}
                       </Text>
                       " ?
                     </Text>
@@ -114,7 +134,7 @@ const TestRoom = () => {
                   </View>
                   <Spacer space={20} />
                   <View>
-                    {testObj.options?.map((item: string, index: number) => {
+                    {quizObj.options?.map((item: string, index: number) => {
                       return (
                         <TouchableOpacity
                           disabled={isOptionDisabled}
@@ -123,15 +143,15 @@ const TestRoom = () => {
                           style={[
                             styles.optionConainer,
                             isCorrect &&
-                              item === testObj.meaning &&
+                              item === quizObj.actualMeaning &&
                               styles.rightOptionContainer,
                             !isCorrect &&
                               isOptionDisabled &&
-                              testObj.selectedOption === item &&
+                              quizObj.selectedOption === item &&
                               styles.wrongOptionContainer,
                             !isCorrect &&
                               isOptionDisabled &&
-                              item === testObj.meaning &&
+                              item === quizObj.actualMeaning &&
                               styles.rightOptionContainer,
                           ]}>
                           <Text style={styles.optionText}>{item}</Text>
@@ -161,67 +181,25 @@ const TestRoom = () => {
           />
         ) : (
           <Button
-            variant={testObj.meaning !== '' ? 'PRIMARY' : 'DISABLED'}
-            label="NEXT"
+            variant={!isNextButtonDisabled ? 'PRIMARY' : 'TERTIARY'}
+            label={!isNextButtonDisabled ? 'NEXT' : 'Show score'}
             onClick={handleClick}
           />
         )}
       </View>
       <Spacer space={20} />
-      <ModalPopup isVisible={isModalVisible} setIsVisible={setIsModalVisible}>
-        {testObj.score === 10 ? (
-          <View>
-            <Text style={styles.score}>Congratulations 🎉</Text>
-            <Text style={styles.scoreText}>You have nailed it!</Text>
-          </View>
-        ) : (
-          <Text style={styles.scoreText}>
-            Your score is{' '}
-            <Text style={[styles.scoreText, styles.score]}>
-              {testObj.score}
-            </Text>
-          </Text>
-        )}
-        <Spacer space={20} />
-        {testObj.score < 5 ? (
-          <TouchableOpacity
-            style={styles.tryAgainButton}
-            onPress={() => {
-              setIsClicked(false);
-              setIsModalVisible(false);
-              setTestObj({...testObj, score: 0});
-            }}>
-            <Text style={styles.tryAgainText}>Try Again!</Text>
-          </TouchableOpacity>
-        ) : testObj.score < 10 && testObj.score > 5 ? (
-          <TouchableOpacity
-            style={styles.tryAgainButton}
-            onPress={() => {
-              setIsClicked(false);
-              setIsModalVisible(false);
-              setTestObj({...testObj, score: 0});
-            }}>
-            <Text style={styles.tryAgainText}>Cool! Try Again!</Text>
-          </TouchableOpacity>
-        ) : (
-          testObj.score === 10 && (
-            <TouchableOpacity
-              style={styles.tryAgainButton}
-              onPress={() => {
-                setIsClicked(false);
-                setIsModalVisible(false);
-                setTestObj({...testObj, score: 0});
-              }}>
-              <Text style={styles.tryAgainText}>Restart!</Text>
-            </TouchableOpacity>
-          )
-        )}
-      </ModalPopup>
-      {testObj.score === 10 && (
+      <QuizModal
+        isVisible={isModalVisible}
+        setIsVisible={setIsModalVisible}
+        score={quizObj.score}
+        text={generateModalText()}
+        onPress={handleResult}
+      />
+      {quizObj.score === 10 && (
         <ConfettiCannon count={200} origin={{x: -10, y: 0}} />
       )}
     </PageHeader>
   );
 };
 
-export default TestRoom;
+export default QuizRoom;

@@ -7,13 +7,14 @@ export const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
   },
+
   headerTitle: {
     textAlign: 'center',
-    marginTop: 180,
     fontSize: FONTSIZES.header,
     opacity: 0.4,
     fontWeight: FONTWEIGHTS.semibold,
     color: COLORS.action.tertiary,
+    marginTop: 180,
   },
   image: {
     width: '100%',

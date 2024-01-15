@@ -1,4 +1,3 @@
-
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {COLORS} from '../../themes/colors';
@@ -9,7 +8,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {FONTSIZES} from '../../themes/font';
 import {styles} from './style';
 import Dictionary from '../../screens/DictionaryScreen';
-import TestRoom from '../../screens/TestRoom';
+import QuizRoom from '../../screens/QuizRoom';
+import {GameRoom} from '../../screens/GameRoom';
 
 const Tab = createBottomTabNavigator<HomeTabParamList>();
 
@@ -42,11 +42,21 @@ export const BottomTab = () => {
                 />
               </View>
             );
-          } else if (route.name === 'TESTROOM') {
+          } else if (route.name === 'QUIZROOM') {
             iconName = (
               <View style={focused && styles.iconActive}>
                 <Icon
                   name="rocket"
+                  size={FONTSIZES.lg}
+                  color={COLORS.action.tertiary}
+                />
+              </View>
+            );
+          } else if (route.name === 'GAMEROOM') {
+            iconName = (
+              <View style={focused && styles.iconActive}>
+                <Icon
+                  name="gamepad"
                   size={FONTSIZES.lg}
                   color={COLORS.action.tertiary}
                 />
@@ -63,7 +73,8 @@ export const BottomTab = () => {
       })}>
       <Tab.Screen name="HOME" component={HomeScreen} />
       <Tab.Screen name="DICTIONARY" component={Dictionary} />
-      <Tab.Screen name="TESTROOM" component={TestRoom} />
+      <Tab.Screen name="QUIZROOM" component={QuizRoom} />
+      <Tab.Screen name="GAMEROOM" component={GameRoom} />
     </Tab.Navigator>
   );
 };

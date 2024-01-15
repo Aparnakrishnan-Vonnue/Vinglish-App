@@ -5,8 +5,10 @@ import {NavigationContainer} from '@react-navigation/native';
 import {DefaultScreenOptions} from '../constants';
 import HomeScreen from '../screens/HomeScreen';
 import {BottomTab} from '../components/BottomNavBar';
-import TestRoom from '../screens/TestRoom';
+import QuizRoom from '../screens/QuizRoom';
 import Dictionary from '../screens/DictionaryScreen';
+import {GameRoom} from '../screens/GameRoom';
+import {HangmanScreen} from '../screens/Hangman';
 
 export const Router = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -16,8 +18,9 @@ export const Router = () => {
       <>
         <Stack.Screen name="NAVBAR" component={BottomTab} />
         <Stack.Screen name="HOME" component={HomeScreen} />
-        <Stack.Screen name="TESTROOM" component={TestRoom} />
+        <Stack.Screen name="QUIZROOM" component={QuizRoom} />
         <Stack.Screen name="DICTIONARY" component={Dictionary} />
+        <Stack.Screen name="HANGMAN" component={HangmanScreen} />
       </>
     );
   };

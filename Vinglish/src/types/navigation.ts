@@ -4,8 +4,9 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 export type RootStackParamList = {
   HOME: undefined;
   NAVBAR: undefined;
-  TESTROOM: undefined;
+  QUIZROOM: undefined;
   DICTIONARY: undefined;
+  HANGMAN: undefined;
 };
 
 export type RootStackNavigationProps =
@@ -17,5 +18,6 @@ export type RootStackRouterProps<T extends keyof RootStackParamList> =
 export type HomeTabParamList = {
   HOME: undefined;
   DICTIONARY: undefined;
-  TESTROOM: undefined;
+  QUIZROOM: undefined;
+  GAMEROOM: undefined;
 };

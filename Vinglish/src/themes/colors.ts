@@ -1,12 +1,12 @@
 export const COLORS = {
-  primary: '#800080',
+  primary: '#88304E',
   secondary: '#FFFFFF',
   tertiary: '#EEF5FF',
   action: {
-    primary: '#DA70D6',
+    primary: '#522546',
     secondary: '#FFFFFF',
     tertiary: '#808080',
-    quarternary: '#96EFFF',
+    quarternary: '#B9B4C7',
     success: '#013220',
     error: '#FE0000',
   },

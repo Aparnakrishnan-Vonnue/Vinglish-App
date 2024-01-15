@@ -17,6 +17,9 @@ export const styles = StyleSheet.create({
   buttonSecondary: {
     backgroundColor: COLORS.action.quarternary,
   },
+  buttonTertiary: {
+    borderWidth: 0,
+  },
   ghostButton: {
     borderColor: COLORS.border.secondary,
     borderWidth: 2,
@@ -44,5 +47,9 @@ export const styles = StyleSheet.create({
   disabledButtonText: {
     color: COLORS.text.primary,
     opacity: 0.5,
+  },
+  buttonTextTertiary: {
+    textDecorationLine: 'underline',
+    textDecorationColor: COLORS.border.primary,
   },
 });
