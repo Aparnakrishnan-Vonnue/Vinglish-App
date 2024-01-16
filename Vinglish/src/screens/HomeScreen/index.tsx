@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Image, Text, View} from 'react-native';
+import {Image, StatusBar, Text, View} from 'react-native';
 import Button from '../../components/Button';
 import ScreenWrapper from '../../components/ScreenWrapper';
 import {styles} from './styles';
@@ -7,6 +7,7 @@ import BottomSheet from '../../components/BottomSheet';
 import {useState} from 'react';
 import {dictionary} from '../../data';
 import Spacer from '../../components/Spacer';
+import {COLORS} from '../../themes/colors';
 
 interface Dictionary {
   word: string;
@@ -51,6 +52,7 @@ const HomeScreen = () => {
 
   return (
     <ScreenWrapper style={styles.screenWrapper}>
+      <StatusBar backgroundColor={COLORS.text.secondary} />
       <Text style={styles.headerTitle}>VINGLISH</Text>
       <Spacer />
       <View>

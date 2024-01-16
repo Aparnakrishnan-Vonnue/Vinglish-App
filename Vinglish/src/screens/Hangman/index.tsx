@@ -4,11 +4,16 @@ import {dictionary} from '../../data';
 import LinearGradient from 'react-native-linear-gradient';
 import {styles} from './style';
 import Spacer from '../../components/Spacer';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export const HangmanScreen = () => {
   const [mysteryWord, setMysteryWord] = useState('');
   const [startGame, setStartGame] = useState(false);
-  const [randomIndices, setRandomIndices] = useState([]);
+  const [randomIndices, setRandomIndices] = useState<number[]>([]);
+  const [incorrectGuesses, setIncorrectGuesses] = useState(0);
+  const [hang, setHang] = useState(false);
+
+  const maxIncorrectGuesses = 6;
 
   const generateRandomWord = () => {
     let newWord =
@@ -17,7 +22,7 @@ export const HangmanScreen = () => {
   };
 
   const getRandomLocation = (string: string, numIndices: number) => {
-    let selectedIndices: any = [];
+    let selectedIndices: number[] = [];
     for (let i = 0; i < numIndices; i++) {
       let randomIndex = Math.floor(Math.random() * string.length);
       if (!selectedIndices.includes(randomIndex)) {
@@ -27,13 +32,23 @@ export const HangmanScreen = () => {
         break;
       }
     }
-    console.log(randomIndices);
-
     setRandomIndices(selectedIndices);
   };
 
   const handleTextChange = (letter: string) => {
-    for (let i = 0; i < mysteryWord.length; i++) {}
+    let isIncorrect = true;
+    for (let i = 0; i < mysteryWord.length; i++) {
+      if (letter.toLowerCase() === mysteryWord[i].toLowerCase()) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        isIncorrect = false;
+        break;
+      } else {
+        setHang(!hang);
+      }
+    }
+    if (isIncorrect) {
+      setIncorrectGuesses(incorrectGuesses + 1);
+    }
   };
 
   const showTypePad = () => {
@@ -45,7 +60,8 @@ export const HangmanScreen = () => {
           maxLength={1}
           onChangeText={text => handleTextChange(text)}
           key={i}
-          value={randomIndices?.includes(i) ? mysteryWord[i] : ''}
+          defaultValue={randomIndices?.includes(i) ? mysteryWord[i] : ''}
+          editable={!randomIndices.includes(i)}
         />,
       );
     }
@@ -68,6 +84,9 @@ export const HangmanScreen = () => {
       colors={['#4c669f', '#3b5998', '#192f6a']}
       style={styles.linearGradient}>
       <StatusBar backgroundColor="#4c669f" barStyle="light-content" />
+      <View>
+        <View style={{borderRightWidth: 1}}></View>
+      </View>
       {startGame && mysteryWord && (
         <View style={styles.typePadContainer}>{showTypePad()}</View>
       )}
@@ -77,6 +96,14 @@ export const HangmanScreen = () => {
         onPress={handlePlayButtonClick}>
         <Text style={styles.playText}>{!startGame ? 'PLAY' : 'SUBMIT'}</Text>
       </TouchableOpacity>
+      <Spacer space={20} />
+      {!startGame && (
+        <TouchableOpacity
+          style={styles.playButton}
+          onPress={handlePlayButtonClick}>
+          <Text style={styles.playText}>Back</Text>
+        </TouchableOpacity>
+      )}
     </LinearGradient>
   );
 };
