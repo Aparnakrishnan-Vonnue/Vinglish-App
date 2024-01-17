@@ -8,6 +8,9 @@ export const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
     borderRadius: 5,
+  },
+  gameContainer: {
+    flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
   },

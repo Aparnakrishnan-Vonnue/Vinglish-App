@@ -4,14 +4,15 @@ import {dictionary} from '../../data';
 import LinearGradient from 'react-native-linear-gradient';
 import {styles} from './style';
 import Spacer from '../../components/Spacer';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import Figure from './components/figure';
 
 export const HangmanScreen = () => {
   const [mysteryWord, setMysteryWord] = useState('');
-  const [startGame, setStartGame] = useState(false);
+  const [isGameStarted, setIsGameStarted] = useState(false);
   const [randomIndices, setRandomIndices] = useState<number[]>([]);
   const [incorrectGuesses, setIncorrectGuesses] = useState(0);
-  const [hang, setHang] = useState(false);
+  const [showHangMan, setShowHangMan] = useState(false);
+  const [isIncorrectGuess, setIsIncorrectGuess] = useState(false);
 
   const maxIncorrectGuesses = 6;
 
@@ -36,17 +37,23 @@ export const HangmanScreen = () => {
   };
 
   const handleTextChange = (letter: string) => {
+    if (
+      !isGameStarted ||
+      showHangMan ||
+      incorrectGuesses >= maxIncorrectGuesses
+    ) {
+      return;
+    }
+
     let isIncorrect = true;
     for (let i = 0; i < mysteryWord.length; i++) {
       if (letter.toLowerCase() === mysteryWord[i].toLowerCase()) {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         isIncorrect = false;
         break;
-      } else {
-        setHang(!hang);
       }
     }
     if (isIncorrect) {
+      setIsIncorrectGuess(true);
       setIncorrectGuesses(incorrectGuesses + 1);
     }
   };
@@ -69,7 +76,9 @@ export const HangmanScreen = () => {
   };
 
   const handlePlayButtonClick = () => {
-    setStartGame(true);
+    setIsGameStarted(true);
+    setShowHangMan(false);
+    setIncorrectGuesses(0);
     generateRandomWord();
   };
 
@@ -84,26 +93,39 @@ export const HangmanScreen = () => {
       colors={['#4c669f', '#3b5998', '#192f6a']}
       style={styles.linearGradient}>
       <StatusBar backgroundColor="#4c669f" barStyle="light-content" />
-      <View>
-        <View style={{borderRightWidth: 1}}></View>
+      {isGameStarted && <Figure errors={incorrectGuesses} />}
+      <View style={styles.gameContainer}>
+        {isGameStarted && mysteryWord && (
+          <View>
+            <View style={styles.typePadContainer}>{showTypePad()}</View>
+          </View>
+        )}
+        <Spacer space={30} />
       </View>
-      {startGame && mysteryWord && (
-        <View style={styles.typePadContainer}>{showTypePad()}</View>
-      )}
-      <Spacer space={30} />
-      <TouchableOpacity
-        style={styles.playButton}
-        onPress={handlePlayButtonClick}>
-        <Text style={styles.playText}>{!startGame ? 'PLAY' : 'SUBMIT'}</Text>
-      </TouchableOpacity>
-      <Spacer space={20} />
-      {!startGame && (
-        <TouchableOpacity
-          style={styles.playButton}
-          onPress={handlePlayButtonClick}>
-          <Text style={styles.playText}>Back</Text>
-        </TouchableOpacity>
-      )}
+      <View
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: 700,
+        }}>
+        {!isGameStarted && (
+          <View>
+            <TouchableOpacity
+              style={styles.playButton}
+              onPress={handlePlayButtonClick}>
+              <Text style={styles.playText}>PLAY</Text>
+            </TouchableOpacity>
+            <Spacer space={20} />
+            <TouchableOpacity
+              style={styles.playButton}
+              onPress={handlePlayButtonClick}>
+              <Text style={styles.playText}>Back</Text>
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
     </LinearGradient>
   );
 };

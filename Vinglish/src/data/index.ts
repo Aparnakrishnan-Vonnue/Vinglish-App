@@ -368,6 +368,38 @@ export const dictionary = [
     usage: 'The practice of Polygamy was banned',
     partsOfSpeech: 'noun',
   },
+  {
+    word: 'Monologue',
+    meaning:
+      'A long speech by one actor in a play or as part of a theatrical or broadcast programme',
+    synonyms: 'speech, address',
+    usage: 'He was reciting some of the great dialogues of William Shakesphere',
+    partsOfSpeech: 'noun',
+  },
+  {
+    word: 'Monopoly',
+    meaning:
+      'The exclusive possession of control of the supply of or trade in a commodity or service',
+    synonyms: 'cartel, holding',
+    usage: "The state's monopoly of radio and television broadcasting",
+    partsOfSpeech: 'noun',
+  },
+  {
+    word: 'Monastry',
+    meaning:
+      'A Building or buildings occupied by a community of monks living under religious vows',
+    synonyms: 'friary, religious house',
+    usage: 'She set her things around the monastic bedroom',
+    partsOfSpeech: 'noun',
+  },
+  {
+    word: 'Bicycle',
+    meaning:
+      'A vehicle consisting of two wheels held in a frame one behind the other, propelled by pedals and steered with handlebars attached to the front wheel',
+    synonyms: 'cycle, two wheeler',
+    usage: 'He got on his bicycle and rode off',
+    partsOfSpeech: 'noun',
+  },
 ];
 
 export const gameCardData = [
