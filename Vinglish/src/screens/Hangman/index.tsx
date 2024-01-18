@@ -75,6 +75,8 @@ export const HangmanScreen = () => {
     return typePadViews;
   };
 
+  console.log(mysteryWord);
+
   const handlePlayButtonClick = () => {
     setIsGameStarted(true);
     setShowHangMan(false);
