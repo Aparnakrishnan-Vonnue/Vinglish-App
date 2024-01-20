@@ -7,8 +7,8 @@ import HomeScreen from '../screens/HomeScreen';
 import {BottomTab} from '../components/BottomNavBar';
 import QuizRoom from '../screens/QuizRoom';
 import Dictionary from '../screens/DictionaryScreen';
-import {GameRoom} from '../screens/GameRoom';
 import {HangmanScreen} from '../screens/Hangman';
+import {HangmanGame} from '../screens/Hangman/index2';
 
 export const Router = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();

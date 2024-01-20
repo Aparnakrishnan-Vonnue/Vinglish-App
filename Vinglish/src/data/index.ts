@@ -400,6 +400,28 @@ export const dictionary = [
     usage: 'He got on his bicycle and rode off',
     partsOfSpeech: 'noun',
   },
+  {
+    word: 'Biped',
+    meaning: 'An animal that uses two legs for walking',
+    synonyms: 'creature',
+    usage: 'The iconic creature Tyannosaurus rex was a biped',
+    partsOfSpeech: 'noun',
+  },
+  {
+    word: 'Bilateral',
+    meaning: 'Having or relating to two sides, affecting both sides',
+    synonyms: 'cooperative, collective',
+    usage: 'Bilateral hearing is essential for sound location',
+    partsOfSpeech: 'adjective',
+  },
+  {
+    word: 'Misogynynst',
+    meaning:
+      'A person who dislikes, despises or is strongly prejudices against woman',
+    synonyms: '',
+    usage: '',
+    partsOfSpeech: '',
+  },
 ];
 
 export const gameCardData = [

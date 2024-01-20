@@ -1,18 +1,21 @@
 import React, {useEffect, useState} from 'react';
-import {StatusBar, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {StatusBar, Text, TouchableOpacity, View} from 'react-native';
+import ConfettiCannon from 'react-native-confetti-cannon';
 import {dictionary} from '../../data';
 import LinearGradient from 'react-native-linear-gradient';
 import {styles} from './style';
 import Spacer from '../../components/Spacer';
 import Figure from './components/figure';
+import {CertainityPopUp} from '../../components/CertainityPopUp';
+import {TypePad} from './components/typePad';
 
 export const HangmanScreen = () => {
   const [mysteryWord, setMysteryWord] = useState('');
-  const [isGameStarted, setIsGameStarted] = useState(false);
   const [randomIndices, setRandomIndices] = useState<number[]>([]);
   const [incorrectGuesses, setIncorrectGuesses] = useState(0);
-  const [showHangMan, setShowHangMan] = useState(false);
-  const [isIncorrectGuess, setIsIncorrectGuess] = useState(false);
+  const [showQuitPopUp, setShowQuitPopUp] = useState(false);
+  const [valueItems, setValueItems] = useState<Record<number, string>>({});
+  const [isGameStarted, setIsGameStarted] = useState(false);
 
   const maxIncorrectGuesses = 6;
 
@@ -20,10 +23,11 @@ export const HangmanScreen = () => {
     let newWord =
       dictionary[Math.floor(Math.random() * dictionary.length)].word;
     setMysteryWord(newWord);
+    getRandomLocation(newWord, newWord.length > 5 ? 3 : 2);
   };
 
   const getRandomLocation = (string: string, numIndices: number) => {
-    let selectedIndices: number[] = [];
+    let selectedIndices: number[] = [0];
     for (let i = 0; i < numIndices; i++) {
       let randomIndex = Math.floor(Math.random() * string.length);
       if (!selectedIndices.includes(randomIndex)) {
@@ -36,59 +40,24 @@ export const HangmanScreen = () => {
     setRandomIndices(selectedIndices);
   };
 
-  const handleTextChange = (letter: string) => {
-    if (
-      !isGameStarted ||
-      showHangMan ||
-      incorrectGuesses >= maxIncorrectGuesses
-    ) {
-      return;
+  useEffect(() => {
+    if (randomIndices.length && mysteryWord) {
+      const newValueItems = {...valueItems};
+      randomIndices.forEach(item => {
+        newValueItems[item] = mysteryWord[item];
+      });
+      setValueItems(newValueItems);
     }
+  }, [mysteryWord, randomIndices]);
 
-    let isIncorrect = true;
-    for (let i = 0; i < mysteryWord.length; i++) {
-      if (letter.toLowerCase() === mysteryWord[i].toLowerCase()) {
-        isIncorrect = false;
-        break;
-      }
-    }
-    if (isIncorrect) {
-      setIsIncorrectGuess(true);
+  const evaluateWord = (rightIndex: number) => {
+    if (!rightIndex && mysteryWord) {
       setIncorrectGuesses(incorrectGuesses + 1);
     }
+    const newValueItems = {...valueItems};
+    newValueItems[rightIndex] = mysteryWord[rightIndex];
+    setValueItems(newValueItems);
   };
-
-  const showTypePad = () => {
-    const typePadViews = [];
-    for (let i = 0; i < mysteryWord?.length; i++) {
-      typePadViews.push(
-        <TextInput
-          style={styles.typePad}
-          maxLength={1}
-          onChangeText={text => handleTextChange(text)}
-          key={i}
-          defaultValue={randomIndices?.includes(i) ? mysteryWord[i] : ''}
-          editable={!randomIndices.includes(i)}
-        />,
-      );
-    }
-    return typePadViews;
-  };
-
-  console.log(mysteryWord);
-
-  const handlePlayButtonClick = () => {
-    setIsGameStarted(true);
-    setShowHangMan(false);
-    setIncorrectGuesses(0);
-    generateRandomWord();
-  };
-
-  useEffect(() => {
-    if (mysteryWord.length !== 0) {
-      getRandomLocation(mysteryWord, mysteryWord.length > 5 ? 3 : 2);
-    }
-  }, [mysteryWord]);
 
   return (
     <LinearGradient
@@ -96,38 +65,94 @@ export const HangmanScreen = () => {
       style={styles.linearGradient}>
       <StatusBar backgroundColor="#4c669f" barStyle="light-content" />
       {isGameStarted && <Figure errors={incorrectGuesses} />}
-      <View style={styles.gameContainer}>
-        {isGameStarted && mysteryWord && (
+      {incorrectGuesses === maxIncorrectGuesses && isGameStarted && (
+        <Text style={styles.hungText}>YOU ARE HUNG!</Text>
+      )}
+      {Object.values(valueItems).length !== 0 &&
+        Object.values(valueItems).join('') === mysteryWord &&
+        isGameStarted && (
+          <>
+            <Text style={[styles.hungText, styles.wonText]}>
+              Congratulations! You Won!
+            </Text>
+            <ConfettiCannon count={200} origin={{x: -10, y: 0}} />
+          </>
+        )}
+      <View
+        style={
+          showQuitPopUp
+            ? [styles.gameContainer, styles.opacity]
+            : styles.gameContainer
+        }>
+        {isGameStarted && (
           <View>
-            <View style={styles.typePadContainer}>{showTypePad()}</View>
+            <View>
+              <View style={styles.typePadContainer}>
+                <TypePad
+                  word={mysteryWord.toLowerCase()}
+                  valueObj={valueItems}
+                  evaluateWord={(i: any) => evaluateWord(i)}
+                />
+              </View>
+            </View>
+            <Spacer space={30} />
+            <View
+              style={
+                incorrectGuesses === maxIncorrectGuesses
+                  ? styles.playAgainButtonContainer
+                  : [
+                      styles.playAgainButtonContainer,
+                      styles.quitButtonContainer,
+                    ]
+              }>
+              {incorrectGuesses === maxIncorrectGuesses ? (
+                <TouchableOpacity
+                  style={[styles.playButton, styles.playAgainButton]}
+                  onPress={() => setIsGameStarted(false)}>
+                  <Text style={styles.playText}>Play Again</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  style={[styles.playButton, styles.playAgainButton]}
+                  onPress={() => setShowQuitPopUp(true)}>
+                  <Text style={styles.playText}>Quit</Text>
+                </TouchableOpacity>
+              )}
+            </View>
           </View>
         )}
         <Spacer space={30} />
       </View>
-      <View
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: 700,
-        }}>
+      <View style={styles.buttonContainer}>
         {!isGameStarted && (
           <View>
             <TouchableOpacity
               style={styles.playButton}
-              onPress={handlePlayButtonClick}>
+              onPress={() => {
+                setIsGameStarted(true);
+                generateRandomWord();
+              }}>
               <Text style={styles.playText}>PLAY</Text>
             </TouchableOpacity>
             <Spacer space={20} />
-            <TouchableOpacity
-              style={styles.playButton}
-              onPress={handlePlayButtonClick}>
+            <TouchableOpacity style={styles.playButton}>
               <Text style={styles.playText}>Back</Text>
             </TouchableOpacity>
           </View>
         )}
       </View>
+      {showQuitPopUp && (
+        <CertainityPopUp
+          isVisible={showQuitPopUp}
+          setIsVisible={setShowQuitPopUp}
+          purpose="Quit"
+          onYesClick={() => {
+            setIsGameStarted(false);
+            setShowQuitPopUp(false);
+          }}
+          onNoClick={() => setShowQuitPopUp(false)}
+        />
+      )}
     </LinearGradient>
   );
 };

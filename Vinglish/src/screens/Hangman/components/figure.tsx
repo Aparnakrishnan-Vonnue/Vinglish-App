@@ -6,7 +6,7 @@ interface FigureProps {
 }
 const Figure = ({errors}: FigureProps) => {
   return (
-    <Svg style={{height: 400}}>
+    <Svg style={{height: 300}}>
       <Line x1="60" y1="20" x2="140" y2="20" stroke="black" />
       <Line x1="140" y1="20" x2="140" y2="50" stroke="black" />
       <Line x1="60" y1="20" x2="60" y2="230" stroke="black" />

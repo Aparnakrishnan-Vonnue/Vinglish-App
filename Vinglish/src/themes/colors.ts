@@ -9,6 +9,7 @@ export const COLORS = {
     quarternary: '#B9B4C7',
     success: '#013220',
     error: '#FE0000',
+    yellowPrimary: '#F99417',
   },
   text: {
     primary: '#000000',

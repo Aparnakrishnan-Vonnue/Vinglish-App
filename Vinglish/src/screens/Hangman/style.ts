@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {COLORS} from '../../themes/colors';
-import {FONTSIZES} from '../../themes/font';
+import {FONTSIZES, FONTWEIGHTS} from '../../themes/font';
 
 export const styles = StyleSheet.create({
   linearGradient: {
@@ -8,6 +8,9 @@ export const styles = StyleSheet.create({
     paddingLeft: 15,
     paddingRight: 15,
     borderRadius: 5,
+  },
+  opacity: {
+    opacity: 0.2,
   },
   gameContainer: {
     flexDirection: 'column',
@@ -18,11 +21,23 @@ export const styles = StyleSheet.create({
     paddingVertical: 5,
     paddingHorizontal: 20,
     borderWidth: 1,
-    backgroundColor: '#F99417',
+    backgroundColor: COLORS.action.yellowPrimary,
+  },
+  playAgainButton: {
+    width: 150,
+  },
+  playAgainButtonContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  quitButtonContainer: {
+    height: 600,
   },
   playText: {
     color: COLORS.text.primary,
     fontSize: FONTSIZES.lg,
+    textAlign: 'center',
   },
   typePadContainer: {
     flexDirection: 'row',
@@ -38,5 +53,23 @@ export const styles = StyleSheet.create({
     fontSize: FONTSIZES.xxl,
     color: COLORS.text.secondary,
     textAlign: 'center',
+  },
+  hungText: {
+    textAlign: 'center',
+    padding: 20,
+    marginBottom: 15,
+    fontSize: FONTSIZES.header,
+    color: COLORS.action.yellowPrimary,
+    fontWeight: FONTWEIGHTS.bold,
+  },
+  wonText: {
+    fontSize: FONTSIZES.subtitle,
+  },
+  buttonContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 700,
   },
 });
