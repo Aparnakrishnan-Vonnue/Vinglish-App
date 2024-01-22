@@ -8,7 +8,7 @@ import {BottomTab} from '../components/BottomNavBar';
 import QuizRoom from '../screens/QuizRoom';
 import Dictionary from '../screens/DictionaryScreen';
 import {HangmanScreen} from '../screens/Hangman';
-import {HangmanGame} from '../screens/Hangman/index2';
+import {HangmanGame} from '../screens/Hangman';
 
 export const Router = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -20,7 +20,11 @@ export const Router = () => {
         <Stack.Screen name="HOME" component={HomeScreen} />
         <Stack.Screen name="QUIZROOM" component={QuizRoom} />
         <Stack.Screen name="DICTIONARY" component={Dictionary} />
-        <Stack.Screen name="HANGMAN" component={HangmanScreen} />
+        <Stack.Screen
+          name="HANGMAN"
+          component={HangmanGame}
+          options={{headerShown: false}}
+        />
       </>
     );
   };

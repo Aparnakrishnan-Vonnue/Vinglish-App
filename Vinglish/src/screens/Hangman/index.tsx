@@ -1,25 +1,40 @@
 import React, {useEffect, useState} from 'react';
-import {StatusBar, Text, TouchableOpacity, View} from 'react-native';
-import ConfettiCannon from 'react-native-confetti-cannon';
+import {
+  Image,
+  ScrollView,
+  StatusBar,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
+import {View} from 'react-native';
 import {dictionary} from '../../data';
-import LinearGradient from 'react-native-linear-gradient';
+import {TypePad} from './components/typePad';
 import {styles} from './style';
+import {KeyPad} from './components/KeyPad';
 import Spacer from '../../components/Spacer';
+import LinearGradient from 'react-native-linear-gradient';
 import Figure from './components/figure';
 import {CertainityPopUp} from '../../components/CertainityPopUp';
-import {TypePad} from './components/typePad';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {FONTSIZES} from '../../themes/font';
+import {useNavigation} from '@react-navigation/native';
 
-export const HangmanScreen = () => {
+export const HangmanGame = () => {
   const [mysteryWord, setMysteryWord] = useState('');
   const [randomIndices, setRandomIndices] = useState<number[]>([]);
   const [incorrectGuesses, setIncorrectGuesses] = useState(0);
-  const [showQuitPopUp, setShowQuitPopUp] = useState(false);
-  const [valueItems, setValueItems] = useState<Record<number, string>>({});
+  const [valueItems, setValueItems] = useState<any>({});
+  const [alphabet, setAlphabet] = useState('');
   const [isGameStarted, setIsGameStarted] = useState(false);
+  const [showQuitPopUp, setShowQuitPopUp] = useState(false);
+
+  const navigation = useNavigation();
 
   const maxIncorrectGuesses = 6;
 
   const generateRandomWord = () => {
+    setIsGameStarted(true);
+    setIncorrectGuesses(0);
     let newWord =
       dictionary[Math.floor(Math.random() * dictionary.length)].word;
     setMysteryWord(newWord);
@@ -44,111 +59,145 @@ export const HangmanScreen = () => {
     if (randomIndices.length && mysteryWord) {
       const newValueItems = {...valueItems};
       randomIndices.forEach(item => {
-        newValueItems[item] = mysteryWord[item];
+        newValueItems[item] = mysteryWord[item].toUpperCase();
       });
       setValueItems(newValueItems);
     }
   }, [mysteryWord, randomIndices]);
 
-  const evaluateWord = (rightIndex: number) => {
-    if (!rightIndex && mysteryWord) {
-      setIncorrectGuesses(incorrectGuesses + 1);
-    }
+  const resetGame = () => {
+    setValueItems({});
+    setIsGameStarted(false);
+  };
+
+  const evaluateWord = () => {
+    let indexArray: number[] = [];
+
     const newValueItems = {...valueItems};
-    newValueItems[rightIndex] = mysteryWord[rightIndex];
+    let isCorrect = false;
+    mysteryWord.split('').forEach((letter, index) => {
+      if (letter.toUpperCase() === alphabet.toUpperCase()) {
+        indexArray.push(index);
+        newValueItems[index] = alphabet;
+        isCorrect = true;
+      }
+    });
+    if (indexArray.length) {
+      indexArray.forEach(index => {
+        newValueItems[index] = alphabet;
+      });
+    }
+    if (!isCorrect) {
+      setIncorrectGuesses(prevState => prevState + 1);
+    }
     setValueItems(newValueItems);
   };
+
+  console.log(incorrectGuesses);
+
+  useEffect(() => {
+    evaluateWord();
+  }, [alphabet]);
 
   return (
     <LinearGradient
       colors={['#4c669f', '#3b5998', '#192f6a']}
       style={styles.linearGradient}>
-      <StatusBar backgroundColor="#4c669f" barStyle="light-content" />
-      {isGameStarted && <Figure errors={incorrectGuesses} />}
-      {incorrectGuesses === maxIncorrectGuesses && isGameStarted && (
-        <Text style={styles.hungText}>YOU ARE HUNG!</Text>
-      )}
-      {Object.values(valueItems).length !== 0 &&
-        Object.values(valueItems).join('') === mysteryWord &&
-        isGameStarted && (
-          <>
-            <Text style={[styles.hungText, styles.wonText]}>
-              Congratulations! You Won!
-            </Text>
-            <ConfettiCannon count={200} origin={{x: -10, y: 0}} />
-          </>
-        )}
-      <View
-        style={
-          showQuitPopUp
-            ? [styles.gameContainer, styles.opacity]
-            : styles.gameContainer
-        }>
-        {isGameStarted && (
+      <StatusBar backgroundColor={'#4c669f'} />
+      <ScrollView
+        contentContainerStyle={styles.gameContainer}
+        showsVerticalScrollIndicator={false}>
+        {!isGameStarted ? (
           <View>
-            <View>
+            <View style={styles.themeContainer}>
+              <TouchableOpacity onPress={() => navigation.goBack()}>
+                <Icon name="home" size={FONTSIZES.xxxl} style={{padding: 10}} />
+              </TouchableOpacity>
+              <Image
+                source={require('../../assets/images/hangmanTheme.jpg')}
+                alt="theme"
+                style={styles.image}
+              />
+              <Spacer />
+              <Text style={styles.hangmanText}>HANGMAN</Text>
+              <Spacer space={50} />
+              <TouchableOpacity
+                onPress={generateRandomWord}
+                style={styles.playButton}>
+                <Text style={styles.playText}>Start Game</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        ) : (
+          <View>
+            <Figure errors={incorrectGuesses} />
+            <View style={styles.startGameContainer}>
               <View style={styles.typePadContainer}>
+                {mysteryWord &&
+                Object.values(valueItems).join('').toUpperCase() ===
+                  mysteryWord.toUpperCase() ? (
+                  <View>
+                    <Text style={[styles.hungText, styles.wonText]}>
+                      You guessed it right!
+                    </Text>
+                  </View>
+                ) : (
+                  incorrectGuesses === maxIncorrectGuesses && (
+                    <View>
+                      <Text style={[styles.hungText, styles.wonText]}>
+                        You are hung!
+                      </Text>
+                      <Text>The correct word is {mysteryWord}</Text>
+                    </View>
+                  )
+                )}
                 <TypePad
-                  word={mysteryWord.toLowerCase()}
+                  word={mysteryWord.toUpperCase()}
                   valueObj={valueItems}
-                  evaluateWord={(i: any) => evaluateWord(i)}
+                  // evaluateWord={(i: any) => getLetter(i)}
                 />
               </View>
-            </View>
-            <Spacer space={30} />
-            <View
-              style={
-                incorrectGuesses === maxIncorrectGuesses
-                  ? styles.playAgainButtonContainer
-                  : [
-                      styles.playAgainButtonContainer,
-                      styles.quitButtonContainer,
-                    ]
-              }>
-              {incorrectGuesses === maxIncorrectGuesses ? (
+              <Spacer space={50} />
+              <KeyPad
+                getLetter={item => setAlphabet(item)}
+                disabled={
+                  Object.keys(valueItems).includes(alphabet) ? true : false
+                }
+              />
+              <Spacer space={20} />
+              {mysteryWord &&
+              Object.values(valueItems).join('').toUpperCase() ===
+                mysteryWord.toUpperCase() ? (
                 <TouchableOpacity
-                  style={[styles.playButton, styles.playAgainButton]}
-                  onPress={() => setIsGameStarted(false)}>
+                  style={styles.playButton}
+                  onPress={() => resetGame()}>
                   <Text style={styles.playText}>Play Again</Text>
+                </TouchableOpacity>
+              ) : incorrectGuesses === maxIncorrectGuesses ? (
+                <TouchableOpacity
+                  style={styles.playButton}
+                  onPress={() => resetGame()}>
+                  <Text style={styles.playText}>Try Again</Text>
                 </TouchableOpacity>
               ) : (
                 <TouchableOpacity
-                  style={[styles.playButton, styles.playAgainButton]}
+                  style={styles.playButton}
                   onPress={() => setShowQuitPopUp(true)}>
-                  <Text style={styles.playText}>Quit</Text>
+                  <Text style={styles.playText}>Quit game</Text>
                 </TouchableOpacity>
               )}
             </View>
           </View>
         )}
-        <Spacer space={30} />
-      </View>
-      <View style={styles.buttonContainer}>
-        {!isGameStarted && (
-          <View>
-            <TouchableOpacity
-              style={styles.playButton}
-              onPress={() => {
-                setIsGameStarted(true);
-                generateRandomWord();
-              }}>
-              <Text style={styles.playText}>PLAY</Text>
-            </TouchableOpacity>
-            <Spacer space={20} />
-            <TouchableOpacity style={styles.playButton}>
-              <Text style={styles.playText}>Back</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      </View>
+      </ScrollView>
       {showQuitPopUp && (
         <CertainityPopUp
           isVisible={showQuitPopUp}
           setIsVisible={setShowQuitPopUp}
           purpose="Quit"
           onYesClick={() => {
-            setIsGameStarted(false);
             setShowQuitPopUp(false);
+            setIsGameStarted(false);
           }}
           onNoClick={() => setShowQuitPopUp(false)}
         />

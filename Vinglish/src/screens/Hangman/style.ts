@@ -3,6 +3,21 @@ import {COLORS} from '../../themes/colors';
 import {FONTSIZES, FONTWEIGHTS} from '../../themes/font';
 
 export const styles = StyleSheet.create({
+  themeContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    opacity: 0.2,
+    height: 500,
+    width: 500,
+  },
+  hangmanText: {
+    color: COLORS.text.primary,
+    fontSize: FONTSIZES.header,
+    fontWeight: FONTWEIGHTS.bold,
+  },
   linearGradient: {
     flex: 1,
     paddingLeft: 15,
@@ -18,21 +33,11 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
   },
   playButton: {
-    paddingVertical: 5,
+    paddingVertical: 10,
     paddingHorizontal: 20,
-    borderWidth: 1,
     backgroundColor: COLORS.action.yellowPrimary,
-  },
-  playAgainButton: {
-    width: 150,
-  },
-  playAgainButtonContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  quitButtonContainer: {
-    height: 600,
+    borderRadius: 8,
+    elevation: 5,
   },
   playText: {
     color: COLORS.text.primary,
@@ -70,6 +75,10 @@ export const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
-    height: 700,
+  },
+  startGameContainer: {
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

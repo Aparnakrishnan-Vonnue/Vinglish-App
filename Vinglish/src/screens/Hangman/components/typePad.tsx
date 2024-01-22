@@ -7,19 +7,19 @@ import {useState} from 'react';
 interface TypePadProps {
   word: string;
   valueObj: Record<number, string>;
-  evaluateWord: any;
+  // evaluateWord: any;
 }
 
-export const TypePad = ({word, valueObj, evaluateWord}: TypePadProps) => {
+export const TypePad = ({word, valueObj}: TypePadProps) => {
   const [value, setValue] = useState<any>([]);
 
-  useEffect(() => {
-    if (value[0] === word[value[1]]) {
-      evaluateWord(value[1]);
-    } else {
-      setValue([]);
-    }
-  }, [value]);
+  // useEffect(() => {
+  //   if (value[0] === word[value[1]]) {
+  //     evaluateWord(value[1]);
+  //   } else {
+  //     setValue([]);
+  //   }
+  // }, [value]);
 
   return (
     <View style={styles.typePadContainer}>
@@ -33,6 +33,7 @@ export const TypePad = ({word, valueObj, evaluateWord}: TypePadProps) => {
             }
             onChangeText={text => setValue([text.toLowerCase(), index])}
             key={index}
+            editable={false}
           />
         );
       })}
@@ -46,7 +47,7 @@ export const styles = StyleSheet.create({
     borderBottomColor: COLORS.text.primary,
     padding: 10,
     fontSize: FONTSIZES.xxl,
-    color: COLORS.text.primary,
+    color: COLORS.text.secondary,
     textAlign: 'center',
   },
   typePadContainer: {
@@ -55,5 +56,6 @@ export const styles = StyleSheet.create({
     flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
+    elevation: 5,
   },
 });
