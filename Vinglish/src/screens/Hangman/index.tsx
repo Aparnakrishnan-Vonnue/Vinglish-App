@@ -27,6 +27,7 @@ export const HangmanGame = () => {
   const [alphabet, setAlphabet] = useState('');
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [showQuitPopUp, setShowQuitPopUp] = useState(false);
+  const [isKeyDisabled, setIsKeyDisabled] = useState(false);
 
   const navigation = useNavigation();
 
@@ -97,6 +98,11 @@ export const HangmanGame = () => {
 
   useEffect(() => {
     evaluateWord();
+    // (isGameStarted &&
+    //   mysteryWord &&
+    //   Object.values(valueItems).join('').toUpperCase() ===
+    //     mysteryWord.toUpperCase()) ||
+    //   (maxIncorrectGuesses === 6 && setIsKeyDisabled(true));
   }, [alphabet]);
 
   return (
@@ -160,9 +166,7 @@ export const HangmanGame = () => {
               <Spacer space={50} />
               <KeyPad
                 getLetter={item => setAlphabet(item)}
-                disabled={
-                  Object.keys(valueItems).includes(alphabet) ? true : false
-                }
+                disabled={isKeyDisabled}
               />
               <Spacer space={20} />
               {mysteryWord &&
