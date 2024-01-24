@@ -18,6 +18,7 @@ import {CertainityPopUp} from '../../components/CertainityPopUp';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {FONTSIZES} from '../../themes/font';
 import {useNavigation} from '@react-navigation/native';
+import {COLORS} from '../../themes/colors';
 
 export const HangmanGame = () => {
   const [mysteryWord, setMysteryWord] = useState('');
@@ -27,7 +28,7 @@ export const HangmanGame = () => {
   const [alphabet, setAlphabet] = useState('');
   const [isGameStarted, setIsGameStarted] = useState(false);
   const [showQuitPopUp, setShowQuitPopUp] = useState(false);
-  const [isKeyDisabled, setIsKeyDisabled] = useState(false);
+  const [enableKeys, setEnableKeys] = useState(false);
 
   const navigation = useNavigation();
 
@@ -44,6 +45,7 @@ export const HangmanGame = () => {
 
   const getRandomLocation = (string: string, numIndices: number) => {
     let selectedIndices: number[] = [0];
+
     for (let i = 0; i < numIndices; i++) {
       let randomIndex = Math.floor(Math.random() * string.length);
       if (!selectedIndices.includes(randomIndex)) {
@@ -69,7 +71,10 @@ export const HangmanGame = () => {
   const resetGame = () => {
     setValueItems({});
     setIsGameStarted(false);
+    setEnableKeys(!enableKeys);
   };
+
+  console.log(enableKeys);
 
   const evaluateWord = () => {
     let indexArray: number[] = [];
@@ -94,22 +99,23 @@ export const HangmanGame = () => {
     setValueItems(newValueItems);
   };
 
-  console.log(incorrectGuesses);
-
   useEffect(() => {
     evaluateWord();
-    // (isGameStarted &&
-    //   mysteryWord &&
-    //   Object.values(valueItems).join('').toUpperCase() ===
-    //     mysteryWord.toUpperCase()) ||
-    //   (maxIncorrectGuesses === 6 && setIsKeyDisabled(true));
+    let alphabetsArray = [];
+    if (alphabet) {
+      alphabetsArray.push(alphabet);
+    }
   }, [alphabet]);
 
   return (
     <LinearGradient
-      colors={['#4c669f', '#3b5998', '#192f6a']}
+      colors={[
+        COLORS.linearGradients.hangman.primary,
+        COLORS.linearGradients.hangman.secondary,
+        COLORS.linearGradients.hangman.tertiary,
+      ]}
       style={styles.linearGradient}>
-      <StatusBar backgroundColor={'#4c669f'} />
+      <StatusBar backgroundColor={COLORS.linearGradients.hangman.primary} />
       <ScrollView
         contentContainerStyle={styles.gameContainer}
         showsVerticalScrollIndicator={false}>
@@ -153,20 +159,25 @@ export const HangmanGame = () => {
                       <Text style={[styles.hungText, styles.wonText]}>
                         You are hung!
                       </Text>
-                      <Text>The correct word is {mysteryWord}</Text>
+                      <Text
+                        style={{
+                          color: COLORS.text.secondary,
+                          fontSize: FONTSIZES.lg,
+                        }}>
+                        The correct word is {mysteryWord}
+                      </Text>
                     </View>
                   )
                 )}
                 <TypePad
                   word={mysteryWord.toUpperCase()}
                   valueObj={valueItems}
-                  // evaluateWord={(i: any) => getLetter(i)}
                 />
               </View>
               <Spacer space={50} />
               <KeyPad
                 getLetter={item => setAlphabet(item)}
-                disabled={isKeyDisabled}
+                resetKeys={enableKeys}
               />
               <Spacer space={20} />
               {mysteryWord &&
@@ -174,13 +185,19 @@ export const HangmanGame = () => {
                 mysteryWord.toUpperCase() ? (
                 <TouchableOpacity
                   style={styles.playButton}
-                  onPress={() => resetGame()}>
+                  onPress={() => {
+                    resetGame();
+                    generateRandomWord();
+                  }}>
                   <Text style={styles.playText}>Play Again</Text>
                 </TouchableOpacity>
               ) : incorrectGuesses === maxIncorrectGuesses ? (
                 <TouchableOpacity
                   style={styles.playButton}
-                  onPress={() => resetGame()}>
+                  onPress={() => {
+                    resetGame();
+                    generateRandomWord();
+                  }}>
                   <Text style={styles.playText}>Try Again</Text>
                 </TouchableOpacity>
               ) : (
@@ -202,6 +219,7 @@ export const HangmanGame = () => {
           onYesClick={() => {
             setShowQuitPopUp(false);
             setIsGameStarted(false);
+            resetGame();
           }}
           onNoClick={() => setShowQuitPopUp(false)}
         />

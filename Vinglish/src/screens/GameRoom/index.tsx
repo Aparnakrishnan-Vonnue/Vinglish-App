@@ -12,8 +12,8 @@ import {COLORS} from '../../themes/colors';
 export const GameRoom = () => {
   const navigation = useNavigation();
   return (
-    <PageHeader title="Game Room" variant="PRIMARY">
-      <StatusBar backgroundColor={COLORS.primary} />
+    <PageHeader title="Game Room" variant="SECONDARY">
+      <StatusBar backgroundColor={COLORS.text.primary} />
       <Spacer space={22} />
       <ScreenWrapper style={styles.screenWrapper}>
         <ScrollView>
@@ -22,7 +22,7 @@ export const GameRoom = () => {
               title={data.title}
               description={data.description}
               imageUrl={data.imageUrl}
-              onpress={() => navigation.navigate('HANGMAN')}
+              onpress={() => navigation.navigate(data.navigateTo)}
               key={data.title}
             />
           ))}

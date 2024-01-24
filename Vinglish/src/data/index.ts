@@ -1,4 +1,6 @@
 import Hangman from '../assets/images/hangman.jpg';
+import TicTacToe from '../assets/images/tic-tac-toe.jpg';
+import {GameCard} from '../types/navigation';
 
 export const dictionary = [
   {
@@ -424,7 +426,7 @@ export const dictionary = [
   },
 ];
 
-export const gameCardData = [
+export const gameCardData: GameCard = [
   {
     imageUrl: Hangman,
     title: 'Hangman',
@@ -434,5 +436,13 @@ export const gameCardData = [
       'Player 1 writes spaces for letters are written on the page so they know how many letters there are in the word. Player 2 proceeds to choose a letter they think may be in the word.' +
       '\n' +
       'If it is correct Player 1 writes the letter down where it goes. If it is incorrect Player 1 draws part of the “hangman”. If the drawing is complete by the time Player 2 guesses, then Player 1 wins.',
+    navigateTo: 'HANGMAN',
+  },
+  {
+    imageUrl: TicTacToe,
+    title: 'Tic Tac Toe',
+    description:
+      'Tic-tac-toe, noughts and crosses, or Xs and Os is a paper-and-pencil game for two players who take turns marking the spaces in a three-by-three grid with X or O. The player who succeeds in placing three of their marks in a horizontal, vertical, or diagonal row is the winner',
+    navigateTo: 'TIC_TAC_TOE',
   },
 ];

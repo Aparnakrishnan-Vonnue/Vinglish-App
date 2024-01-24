@@ -21,4 +21,17 @@ export const COLORS = {
     primary: '#000000',
     secondary: '#DA70D6',
   },
+  linearGradients: {
+    hangman: {
+      primary: '#4c669f',
+      secondary: '#3b5998',
+      tertiary: '#192f6a',
+    },
+    ticTacToe: {
+      primary: '#9BABB8',
+      secondary: '#EEE3CB',
+      tertiary: '#D7C0AE',
+      quarternary: '#967E76',
+    },
+  },
 };

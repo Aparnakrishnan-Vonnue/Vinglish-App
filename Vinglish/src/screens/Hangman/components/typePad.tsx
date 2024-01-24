@@ -13,14 +13,6 @@ interface TypePadProps {
 export const TypePad = ({word, valueObj}: TypePadProps) => {
   const [value, setValue] = useState<any>([]);
 
-  // useEffect(() => {
-  //   if (value[0] === word[value[1]]) {
-  //     evaluateWord(value[1]);
-  //   } else {
-  //     setValue([]);
-  //   }
-  // }, [value]);
-
   return (
     <View style={styles.typePadContainer}>
       {word?.split('').map((char, index) => {

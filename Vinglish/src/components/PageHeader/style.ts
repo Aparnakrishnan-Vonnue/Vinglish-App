@@ -18,7 +18,7 @@ export const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: COLORS.primary,
+    backgroundColor: COLORS.text.primary,
     paddingVertical: 12,
     paddingRight: 26,
   },
