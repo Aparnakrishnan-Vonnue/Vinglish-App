@@ -29,6 +29,10 @@ export const styles = StyleSheet.create({
     color: COLORS.text.primary,
     opacity: 0.2,
   },
+  buttonQuarternary: {
+    backgroundColor: COLORS.linearGradients.ticTacToe.quarternary,
+    paddingHorizontal: 50,
+  },
 
   //Button text styles
   basicButtonTextStyle: {

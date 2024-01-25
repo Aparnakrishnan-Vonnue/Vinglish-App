@@ -8,7 +8,8 @@ export type ButtonVariant =
   | 'SECONDARY'
   | 'TERTIARY'
   | 'GHOST'
-  | 'DISABLED';
+  | 'DISABLED'
+  | 'QUARTERNARY';
 
 interface ButtonProps {
   label: string;
@@ -36,6 +37,8 @@ const Button = ({
         return styles.ghostButton;
       case 'DISABLED':
         return styles.disabledButton;
+      case 'QUARTERNARY':
+        return styles.buttonQuarternary;
       default:
         return styles.buttonPrimary;
     }
@@ -51,6 +54,8 @@ const Button = ({
         return styles.buttonTextTertiary;
       case 'GHOST':
         return styles.ghostButtonText;
+      case 'QUARTERNARY':
+        return styles.buttonTextPrimary;
       case 'DISABLED':
         return styles.disabledButtonText;
     }
