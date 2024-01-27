@@ -74,8 +74,6 @@ export const HangmanGame = () => {
     setEnableKeys(!enableKeys);
   };
 
-  console.log(enableKeys);
-
   const evaluateWord = () => {
     let indexArray: number[] = [];
 

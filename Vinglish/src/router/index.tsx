@@ -9,6 +9,7 @@ import QuizRoom from '../screens/QuizRoom';
 import Dictionary from '../screens/DictionaryScreen';
 import {HangmanGame} from '../screens/Hangman';
 import {TicTacToeGame} from '../screens/TicTacToe';
+import {WordleGame} from '../screens/WordleGame';
 
 export const Router = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -22,6 +23,7 @@ export const Router = () => {
         <Stack.Screen name="DICTIONARY" component={Dictionary} />
         <Stack.Screen name="HANGMAN" component={HangmanGame} />
         <Stack.Screen name="TIC_TAC_TOE" component={TicTacToeGame} />
+        <Stack.Screen name="WORDLE_GAME" component={WordleGame} />
       </>
     );
   };

@@ -5,7 +5,7 @@ import {useEffect, useState} from 'react';
 
 interface KeypadProps {
   getLetter: (item: string) => void;
-  resetKeys: boolean;
+  resetKeys?: boolean;
 }
 
 export const KeyPad = ({getLetter, resetKeys}: KeypadProps) => {
