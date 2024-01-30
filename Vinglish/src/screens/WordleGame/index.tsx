@@ -1,4 +1,4 @@
-import {Text, TouchableOpacity, View} from 'react-native';
+import {StatusBar, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {styles} from './style';
 import {WordleBoard} from './WordleBoard';
@@ -6,7 +6,7 @@ import Spacer from '../../components/Spacer';
 import {WordleKeyPad} from './WordleKeyPad';
 import {dictionary} from '../../data';
 import {useEffect, useState} from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 
 export const WordleGame = () => {
   const numberOfChances = 6;
@@ -14,10 +14,11 @@ export const WordleGame = () => {
   const [wordOfTheDay, setWordOfTheDay] = useState('');
   const [keyPressed, setKeyPressed] = useState('');
   const [guessNumber, setGuessNumber] = useState(0);
-  const [valueItems, setValueItems] = useState({});
   const [startGame, setStartGame] = useState(false);
-  const [inputQuery, setInputQuery] = useState('apple');
+  const [valueItems, setValueItems] = useState<string[]>([]);
+  //   const [inputQuery, setInputQuery] = useState('apple');
   const [keyPressCount, setKeyPressCount] = useState(-1);
+  //   const [guessedWord, setGuessedWord] = useState('');
 
   const generateRandomWord = () => {
     let selectedWords = dictionary.filter(wordObj => wordObj.word.length === 5);
@@ -26,22 +27,38 @@ export const WordleGame = () => {
     setWordOfTheDay(randomWord);
   };
 
-  const apiUrl = `https://api.datamuse.com/words?sp=${inputQuery}`;
+  //   const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${inputQuery}`;
 
-  const getDictionaryData = () => {
-    axios
-      .get(apiUrl)
-      .then(response => {
-        // console.log(response);
-      })
-      .catch(error => {
-        // console.log(error);
-      });
+  //   const getDictionaryData = () => {
+  //     axios
+  //       .get(apiUrl)
+  //       .then(response => {
+  //         setGuessedWord(response.data[0].word);
+  //       })
+  //       .catch(error => {
+  //         console.log(error);
+  //       });
+  //   };
+
+  //   useEffect(() => {
+  //     getDictionaryData();
+  //   }, [wordOfTheDay]);
+
+  const getValueItems = (item: string) => {
+    let inputWord = '';
+    const newValueItems = [...valueItems];
+    newValueItems.push(item);
+    if (newValueItems.length > 5) {
+      return;
+    }
+    inputWord = newValueItems.join('');
+    if (inputWord.toUpperCase() === wordOfTheDay.toUpperCase()) {
+      console.log('hello');
+    }
+    setValueItems(newValueItems);
   };
 
-  useEffect(() => {
-    getDictionaryData();
-  }, [wordOfTheDay]);
+  console.log(wordOfTheDay);
 
   return (
     <LinearGradient
@@ -49,15 +66,16 @@ export const WordleGame = () => {
       start={{x: 0, y: 1}}
       end={{x: 1, y: 0}}
       style={styles.linearGradient}>
+      <StatusBar backgroundColor={'#005B41'} />
       <View style={styles.gameContainer}>
         {startGame && (
           <View>
             <WordleBoard
               word={wordOfTheDay}
               guessNumber={guessNumber}
-              valueObj={valueItems}
               keyPressed={keyPressed}
               count={keyPressCount}
+              valueItem={valueItems}
             />
             <Spacer space={20} />
             <View style={{paddingHorizontal: 20}}>
@@ -65,6 +83,7 @@ export const WordleGame = () => {
                 getLetter={item => {
                   setKeyPressed(item);
                   setKeyPressCount(prev => prev + 1);
+                  getValueItems(item);
                 }}
               />
             </View>

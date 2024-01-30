@@ -11,7 +11,6 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   square: {
-    borderWidth: 1,
     paddingHorizontal: 20,
     paddingVertical: 20,
     marginHorizontal: 5,
@@ -21,6 +20,10 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: FONTSIZES.xxxl,
     fontWeight: FONTWEIGHTS.bold,
+    borderRadius: 10,
+    elevation: 10,
+    borderTopWidth: 3,
+    borderRightWidth: 3,
   },
   squareValue: {
     color: COLORS.text.primary,

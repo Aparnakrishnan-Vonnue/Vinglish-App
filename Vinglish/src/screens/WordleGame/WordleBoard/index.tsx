@@ -3,7 +3,7 @@ import {styles} from './style';
 
 interface WordleBoardProps {
   word: string;
-  valueObj?: Record<number, string>;
+  valueItem: string[];
   guessNumber: number;
   keyPressed: string;
   count?: number;
@@ -14,7 +14,9 @@ export const WordleBoard = ({
   guessNumber,
   keyPressed,
   count,
+  valueItem,
 }: WordleBoardProps) => {
+  console.log(valueItem);
   return (
     <View style={styles.boardContainer}>
       <View style={styles.row}>
@@ -25,7 +27,9 @@ export const WordleBoard = ({
               maxLength={1}
               style={styles.square}
               key={index}
-              value={guessNumber === 1 && count === index ? keyPressed : ''}
+              value={
+                guessNumber === 1 && count === index ? valueItem[index] : ''
+              }
               editable={false}
             />
           );
