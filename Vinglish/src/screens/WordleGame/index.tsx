@@ -27,22 +27,34 @@ export const WordleGame = () => {
     setWordOfTheDay(randomWord);
   };
 
-  //   const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${inputQuery}`;
+  // const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${inputQuery}`;
 
-  //   const getDictionaryData = () => {
-  //     axios
-  //       .get(apiUrl)
-  //       .then(response => {
-  //         setGuessedWord(response.data[0].word);
-  //       })
-  //       .catch(error => {
-  //         console.log(error);
-  //       });
-  //   };
+  // const getDictionaryData = () => {
+  //   axios
+  //     .get(apiUrl)
+  //     .then(response => {
+  //       setGuessedWord(response.data[0].word);
+  //     })
+  //     .catch(error => {
+  //       console.log(error);
+  //     });
+  // };
 
   //   useEffect(() => {
   //     getDictionaryData();
   //   }, [wordOfTheDay]);
+
+  const handleSubmit = () => {
+    setGuessNumber(prev => prev + 1);
+    setStartGame(true);
+    generateRandomWord();
+    setKeyPressCount(-1);
+    // wordOfTheDay.split('').map((char, index) => {
+    //   if(valueItems.includes(char)){
+
+    //   }
+    // })
+  };
 
   const getValueItems = (item: string) => {
     let inputWord = '';
@@ -93,10 +105,7 @@ export const WordleGame = () => {
         <TouchableOpacity
           style={styles.submitBtn}
           onPress={() => {
-            setGuessNumber(prev => prev + 1);
-            setStartGame(true);
-            generateRandomWord();
-            setKeyPressCount(-1);
+            handleSubmit;
           }}>
           <Text style={styles.submitText}>
             {startGame ? 'SUBMIT' : 'START GAME'}
