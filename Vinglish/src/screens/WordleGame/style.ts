@@ -19,6 +19,17 @@ export const styles = StyleSheet.create({
     backgroundColor: '#6A9619',
     borderRadius: 8,
   },
+  clearButton: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#6A9619',
+    borderRadius: 8,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 5,
+  },
   submitText: {
     fontSize: FONTSIZES.lg,
     color: COLORS.text.primary,

@@ -6,6 +6,9 @@ import Spacer from '../../components/Spacer';
 import {WordleKeyPad} from './WordleKeyPad';
 import {dictionary} from '../../data';
 import {useEffect, useState} from 'react';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {FONTSIZES} from '../../themes/font';
+import {COLORS} from '../../themes/colors';
 // import axios from 'axios';
 
 export const WordleGame = () => {
@@ -19,6 +22,7 @@ export const WordleGame = () => {
   //   const [inputQuery, setInputQuery] = useState('apple');
   const [keyPressCount, setKeyPressCount] = useState(-1);
   //   const [guessedWord, setGuessedWord] = useState('');
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const generateRandomWord = () => {
     let selectedWords = dictionary.filter(wordObj => wordObj.word.length === 5);
@@ -47,14 +51,11 @@ export const WordleGame = () => {
   const handleSubmit = () => {
     setGuessNumber(prev => prev + 1);
     setStartGame(true);
-    generateRandomWord();
     setKeyPressCount(-1);
-    // wordOfTheDay.split('').map((char, index) => {
-    //   if(valueItems.includes(char)){
-
-    //   }
-    // })
+    setIsSubmitted(true);
   };
+
+  console.log(isSubmitted);
 
   const getValueItems = (item: string) => {
     let inputWord = '';
@@ -65,7 +66,9 @@ export const WordleGame = () => {
     }
     inputWord = newValueItems.join('');
     if (inputWord.toUpperCase() === wordOfTheDay.toUpperCase()) {
-      console.log('hello');
+      if (isSubmitted) {
+        console.log('hello');
+      }
     }
     setValueItems(newValueItems);
   };
@@ -102,15 +105,30 @@ export const WordleGame = () => {
             <Spacer space={20} />
           </View>
         )}
-        <TouchableOpacity
-          style={styles.submitBtn}
-          onPress={() => {
-            handleSubmit;
-          }}>
-          <Text style={styles.submitText}>
-            {startGame ? 'SUBMIT' : 'START GAME'}
-          </Text>
-        </TouchableOpacity>
+        {startGame ? (
+          <View style={{display: 'flex', flexDirection: 'row', gap: 8}}>
+            <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
+              <Text style={styles.submitText}>Submit</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.clearButton}>
+              <Text style={styles.submitText}>Clear</Text>
+              <Icon
+                name="backspace"
+                size={FONTSIZES.lg}
+                color={COLORS.text.primary}
+              />
+            </TouchableOpacity>
+          </View>
+        ) : (
+          <TouchableOpacity
+            style={styles.submitBtn}
+            onPress={() => {
+              setStartGame(true);
+              generateRandomWord();
+            }}>
+            <Text style={styles.submitText}>Start Game</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </LinearGradient>
   );
