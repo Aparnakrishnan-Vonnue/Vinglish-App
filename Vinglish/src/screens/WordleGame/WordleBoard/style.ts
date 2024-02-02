@@ -25,6 +25,13 @@ export const styles = StyleSheet.create({
     borderTopWidth: 3,
     borderRightWidth: 3,
   },
+  squareIfCorrect: {
+    backgroundColor: COLORS.action.success,
+    transform: [{rotate: '45 deg'}],
+  },
+  squareIfIncluded: {
+    backgroundColor: COLORS.action.quarternary,
+  },
   squareValue: {
     color: COLORS.text.primary,
     fontSize: FONTSIZES.lg,

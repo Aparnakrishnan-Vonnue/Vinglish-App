@@ -1,6 +1,5 @@
-import {TextInput, View} from 'react-native';
+import { TextInput, View} from 'react-native';
 import {styles} from './style';
-import {useState} from 'react';
 
 interface WordleBoardProps {
   word: string;
@@ -8,6 +7,7 @@ interface WordleBoardProps {
   guessNumber: number;
   keyPressed: string;
   count?: number;
+  result?: Record<string, boolean>;
 }
 
 export const WordleBoard = ({
@@ -16,6 +16,7 @@ export const WordleBoard = ({
   keyPressed,
   count,
   valueItem,
+  result,
 }: WordleBoardProps) => {
   return (
     <View style={styles.boardContainer}>
@@ -23,7 +24,13 @@ export const WordleBoard = ({
         {word.split('').map((char, index) => (
           <TextInput
             maxLength={1}
-            style={styles.square}
+            style={
+              result?.isCorrectWord || result?.isCorrectPosition
+                ? [styles.square, styles.squareIfCorrect]
+                : result?.isIncluded
+                ? [styles.square, styles.squareIfIncluded]
+                : styles.square
+            }
             key={index}
             value={valueItem[index] || ''}
             editable={false}

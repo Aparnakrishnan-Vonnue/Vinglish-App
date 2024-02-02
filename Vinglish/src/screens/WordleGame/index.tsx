@@ -5,24 +5,30 @@ import {WordleBoard} from './WordleBoard';
 import Spacer from '../../components/Spacer';
 import {WordleKeyPad} from './WordleKeyPad';
 import {dictionary} from '../../data';
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {FONTSIZES} from '../../themes/font';
 import {COLORS} from '../../themes/colors';
-// import axios from 'axios';
+import axios from 'axios';
 
 export const WordleGame = () => {
-  const numberOfChances = 6;
+  // const numberOfChances = 6;
 
   const [wordOfTheDay, setWordOfTheDay] = useState('');
   const [keyPressed, setKeyPressed] = useState('');
   const [guessNumber, setGuessNumber] = useState(0);
   const [startGame, setStartGame] = useState(false);
   const [valueItems, setValueItems] = useState<string[]>([]);
-  //   const [inputQuery, setInputQuery] = useState('apple');
+  const [inputQuery, setInputQuery] = useState('');
   const [keyPressCount, setKeyPressCount] = useState(-1);
-  //   const [guessedWord, setGuessedWord] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [inputWord, setInputWord] = useState('');
+  const [result, setResult] = useState({
+    isIncluded: false,
+    isCorrectPosition: false,
+    isNotIncluded: false,
+    isNotFound: false,
+    isCorrectWord: false,
+  });
 
   const generateRandomWord = () => {
     let selectedWords = dictionary.filter(wordObj => wordObj.word.length === 5);
@@ -31,31 +37,42 @@ export const WordleGame = () => {
     setWordOfTheDay(randomWord);
   };
 
-  // const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${inputQuery}`;
+  const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${inputQuery}`;
 
-  // const getDictionaryData = () => {
-  //   axios
-  //     .get(apiUrl)
-  //     .then(response => {
-  //       setGuessedWord(response.data[0].word);
-  //     })
-  //     .catch(error => {
-  //       console.log(error);
-  //     });
-  // };
-
-  //   useEffect(() => {
-  //     getDictionaryData();
-  //   }, [wordOfTheDay]);
+  const getDictionaryData = () => {
+    axios
+      .get(apiUrl)
+      .then(response => {
+        if (response?.data[0].word) {
+          console.log('wordExists');
+        }
+      })
+      .catch(() => {
+        setResult({...result, isNotFound: true});
+        setGuessNumber(prev => prev + 1);
+      });
+  };
 
   const handleSubmit = () => {
+    getDictionaryData();
     setGuessNumber(prev => prev + 1);
     setStartGame(true);
     setKeyPressCount(-1);
-    setIsSubmitted(true);
+    if (inputWord.toUpperCase() === wordOfTheDay.toUpperCase()) {
+      setResult({...result, isCorrectWord: true});
+    } else {
+      inputWord.split('').map((inputChar, index) => {
+        if (wordOfTheDay.split('').includes(inputChar)) {
+          if (index === wordOfTheDay.indexOf(inputChar)) {
+            setResult({...result, isCorrectPosition: true});
+          }
+          setResult({...result, isIncluded: true});
+        } else {
+          setResult({...result, isNotIncluded: true});
+        }
+      });
+    }
   };
-
-  console.log(isSubmitted);
 
   const getValueItems = (item: string) => {
     let inputWord = '';
@@ -65,12 +82,9 @@ export const WordleGame = () => {
       return;
     }
     inputWord = newValueItems.join('');
-    if (inputWord.toUpperCase() === wordOfTheDay.toUpperCase()) {
-      if (isSubmitted) {
-        console.log('hello');
-      }
-    }
+    setInputWord(inputWord);
     setValueItems(newValueItems);
+    setInputQuery(inputWord);
   };
 
   console.log(wordOfTheDay);
@@ -83,6 +97,7 @@ export const WordleGame = () => {
       style={styles.linearGradient}>
       <StatusBar backgroundColor={'#005B41'} />
       <View style={styles.gameContainer}>
+        {result.isNotFound && <Text>Word not exist!</Text>}
         {startGame && (
           <View>
             <WordleBoard
@@ -91,6 +106,7 @@ export const WordleGame = () => {
               keyPressed={keyPressed}
               count={keyPressCount}
               valueItem={valueItems}
+              result={result}
             />
             <Spacer space={20} />
             <View style={{paddingHorizontal: 20}}>
@@ -110,7 +126,9 @@ export const WordleGame = () => {
             <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
               <Text style={styles.submitText}>Submit</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.clearButton}>
+            <TouchableOpacity
+              style={styles.clearButton}
+              onPress={() => valueItems.pop()}>
               <Text style={styles.submitText}>Clear</Text>
               <Icon
                 name="backspace"
