@@ -66,7 +66,7 @@ export const WordleGame = () => {
           if (index === wordOfTheDay.indexOf(inputChar)) {
             setResult({...result, isCorrectPosition: true});
           }
-          // setResult({...result, isIncluded: true});
+          setResult({...result, isIncluded: true});
         } else {
           setResult({...result, isNotIncluded: true});
         }
