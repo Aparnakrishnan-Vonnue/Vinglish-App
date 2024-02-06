@@ -453,6 +453,6 @@ export const gameCardData: GameCard = [
       'Game goal: Guess a five-letter word in 6 tries.' +
       '\n' +
       'To start the game, type any five-letter word then press Enter.After you enter a word, the color of the tiles will change to show which of your chosen letters are in the final word.If a letter is in the target word and in the correct place, the tile turns green.If a letter is in the target word but in the wrong place, the tile turns yellow.If a letter is not in the target word, the tile turns Gray.You win the game when you guess the hidden word and all letters turn green!',
-    navigateTo: 'WORDLE_GAME',
+    navigateTo: 'START_SCREEN',
   },
 ];

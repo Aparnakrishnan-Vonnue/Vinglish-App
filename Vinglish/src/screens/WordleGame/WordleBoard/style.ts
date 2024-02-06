@@ -24,6 +24,7 @@ export const styles = StyleSheet.create({
     elevation: 10,
     borderTopWidth: 3,
     borderRightWidth: 3,
+    width: 60,
   },
   squareIfCorrect: {
     backgroundColor: COLORS.action.success,

@@ -10,6 +10,7 @@ export type RootStackParamList = {
   HANGMAN: undefined;
   TIC_TAC_TOE: undefined;
   WORDLE_GAME: undefined;
+  START_SCREEN: undefined;
 };
 
 export type RootStackNavigationProps =

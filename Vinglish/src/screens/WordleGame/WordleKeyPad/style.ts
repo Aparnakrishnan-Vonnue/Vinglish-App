@@ -10,6 +10,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  keyboardRow: {
+    flexDirection: 'row',
+  },
   keys: {
     padding: 12,
     margin: 2,

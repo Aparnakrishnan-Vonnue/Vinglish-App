@@ -1,4 +1,4 @@
-import {StatusBar, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, StatusBar, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {styles} from './style';
 import {WordleBoard} from './WordleBoard';
@@ -10,32 +10,49 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {FONTSIZES} from '../../themes/font';
 import {COLORS} from '../../themes/colors';
 import axios from 'axios';
+import {GuessRow} from '../WordleGameDummy';
+import {useRoute} from '@react-navigation/native';
+import {RootStackNavigationProps} from '../../types/navigation';
 
 export const WordleGame = () => {
   // const numberOfChances = 6;
 
-  const [wordOfTheDay, setWordOfTheDay] = useState('');
-  const [keyPressed, setKeyPressed] = useState('');
-  const [guessNumber, setGuessNumber] = useState(0);
-  const [startGame, setStartGame] = useState(false);
-  const [valueItems, setValueItems] = useState<string[]>([]);
-  const [inputQuery, setInputQuery] = useState('');
-  const [keyPressCount, setKeyPressCount] = useState(-1);
-  const [inputWord, setInputWord] = useState('');
-  const [result, setResult] = useState({
-    isIncluded: false,
-    isCorrectPosition: false,
-    isNotIncluded: false,
-    isNotFound: false,
-    isCorrectWord: false,
-  });
-
-  const generateRandomWord = () => {
-    let selectedWords = dictionary.filter(wordObj => wordObj.word.length === 5);
-    let randomWord =
-      selectedWords[Math.floor(Math.random() * selectedWords.length)].word;
-    setWordOfTheDay(randomWord);
+  // const [wordOfTheDay, setWordOfTheDay] = useState('');
+  // const [keyPressed, setKeyPressed] = useState('');
+  // const [guessNumber, setGuessNumber] = useState(0);
+  // const [startGame, setStartGame] = useState(false);
+  // const [valueItems, setValueItems] = useState<string[]>([]);
+  // const [inputQuery, setInputQuery] = useState('');
+  // const [keyPressCount, setKeyPressCount] = useState(-1);
+  // const [inputWord, setInputWord] = useState('');
+  // const [result, setResult] = useState({
+  //   isIncluded: false,
+  //   isCorrectPosition: false,
+  //   isNotIncluded: false,
+  //   isNotFound: false,
+  //   isCorrectWord: false,
+  // });
+  interface GuessObjProps {
+    [key: number]: string;
+  }
+  const guessObj: GuessObjProps = {
+    0: '',
+    1: '',
+    2: '',
+    3: '',
+    4: '',
+    5: '',
   };
+  const [guesses, setGuesses] = useState<GuessObjProps>(guessObj);
+  const [guessIndex, setGuessIndex] = useState(0);
+  const [inputQuery, setInputQuery] = useState('');
+
+  // const generateRandomWord = () => {
+  //   let selectedWords = dictionary.filter(wordObj => wordObj.word.length === 5);
+  //   let randomWord =
+  //     selectedWords[Math.floor(Math.random() * selectedWords.length)].word;
+  //   setWordOfTheDay(randomWord);
+  // };
 
   const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${inputQuery}`;
 
@@ -48,46 +65,83 @@ export const WordleGame = () => {
         }
       })
       .catch(() => {
-        setResult({...result, isNotFound: true});
-        setGuessNumber(prev => prev + 1);
+        Alert.alert('Not a valid word');
       });
   };
 
-  const handleSubmit = () => {
-    getDictionaryData();
-    setGuessNumber(prev => prev + 1);
-    setStartGame(true);
-    setKeyPressCount(-1);
-    if (inputWord.toUpperCase() === wordOfTheDay.toUpperCase()) {
-      setResult({...result, isCorrectWord: true});
-    } else {
-      inputWord.split('').map((inputChar, index) => {
-        if (wordOfTheDay.split('').includes(inputChar)) {
-          if (index === wordOfTheDay.indexOf(inputChar)) {
-            setResult({...result, isCorrectPosition: true});
-          }
-          setResult({...result, isIncluded: true});
-        } else {
-          setResult({...result, isNotIncluded: true});
-        }
-      });
+  const route = useRoute<RootStackNavigationProps<'WORDLE_GAME'>>();
+  const activeWord = route?.params?.word;
+
+  // const handleSubmit = () => {
+  //   getDictionaryData();
+  //   setGuessNumber(prev => prev + 1);
+  //   setStartGame(true);
+  //   setKeyPressCount(-1);
+  //   if (inputWord.toUpperCase() === wordOfTheDay.toUpperCase()) {
+  //     setResult({...result, isCorrectWord: true});
+  //   } else {
+  //     inputWord.split('').map((inputChar, index) => {
+  //       if (wordOfTheDay.split('').includes(inputChar)) {
+  //         if (index === wordOfTheDay.indexOf(inputChar)) {
+  //           setResult({...result, isCorrectPosition: true});
+  //         }
+  //         setResult({...result, isIncluded: true});
+  //       } else {
+  //         setResult({...result, isNotIncluded: true});
+  //       }
+  //     });
+  //   }
+  // };
+
+  // const getValueItems = (item: string) => {
+  //   let inputWord = '';
+  //   const newValueItems = [...valueItems];
+  //   newValueItems.push(item);
+  //   if (newValueItems.length > 5) {
+  //     return;
+  //   }
+  //   inputWord = newValueItems.join('');
+  //   setInputWord(inputWord);
+  //   setValueItems(newValueItems);
+  //   setInputQuery(inputWord);
+  // };
+
+  // console.log(wordOfTheDay);
+
+  const handleKeyPress = (letter: string) => {
+    const guess: string = guesses[guessIndex];
+    // console.log(letter);
+    if (letter === 'ENTER') {
+      if (guess.length !== 5) {
+        console.log('word too short!');
+        getDictionaryData();
+        return;
+      }
     }
-  };
 
-  const getValueItems = (item: string) => {
-    let inputWord = '';
-    const newValueItems = [...valueItems];
-    newValueItems.push(item);
-    if (newValueItems.length > 5) {
+    if (guess === activeWord) {
+      Alert.alert('You win');
       return;
     }
-    inputWord = newValueItems.join('');
-    setInputWord(inputWord);
-    setValueItems(newValueItems);
-    setInputQuery(inputWord);
-  };
 
-  console.log(wordOfTheDay);
+    if (letter === '⌫') {
+      setGuesses({...guesses, [guessIndex]: guess.slice(0, -1)});
+      return;
+    }
+
+    if (guessIndex < 5) {
+      setGuessIndex(guessIndex + 1);
+    } else {
+      console.log('You lose');
+    }
+
+    if (guess.length >= 5) {
+      return;
+    }
+
+    setGuesses({...guesses, [guessIndex]: guess + letter});
+    setInputQuery(guess + letter);
+  };
 
   return (
     <LinearGradient
@@ -97,7 +151,16 @@ export const WordleGame = () => {
       style={styles.linearGradient}>
       <StatusBar backgroundColor={'#005B41'} />
       <View style={styles.gameContainer}>
-        {result.isNotFound && <Text>Word not exist!</Text>}
+        <GuessRow guess={guesses[0]} />
+        <GuessRow guess={guesses[1]} />
+        <GuessRow guess={guesses[2]} />
+        <GuessRow guess={guesses[3]} />
+        <GuessRow guess={guesses[4]} />
+        <GuessRow guess={guesses[5]} />
+        <Spacer space={30} />
+        <WordleKeyPad onKeyPress={handleKeyPress} />
+        <Spacer space={30} />
+        {/* {result.isNotFound && <Text>Word not exist!</Text>}
         {startGame && (
           <View>
             <WordleBoard
@@ -146,7 +209,7 @@ export const WordleGame = () => {
             }}>
             <Text style={styles.submitText}>Start Game</Text>
           </TouchableOpacity>
-        )}
+        )} */}
       </View>
     </LinearGradient>
   );
