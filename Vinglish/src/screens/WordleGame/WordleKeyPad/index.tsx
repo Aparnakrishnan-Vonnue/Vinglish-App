@@ -1,9 +1,7 @@
 import {Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './style';
-import {keys} from '../../../constants';
 
 interface WordleKeyPadProps {
-  // getLetter: (item: string) => void;
   letters?: string[];
   onKeyPress: (letter: string) => void;
 }
@@ -12,7 +10,7 @@ const KeyboardRow = ({letters, onKeyPress}: WordleKeyPadProps) => {
   return (
     <View style={styles.keyboardRow}>
       {letters?.map(letter => (
-        <TouchableOpacity onPress={() => onKeyPress(letter)}>
+        <TouchableOpacity onPress={() => onKeyPress(letter)} key={letter}>
           <View style={styles.keys}>
             <Text style={styles.alphabets}>{letter}</Text>
           </View>
@@ -23,10 +21,6 @@ const KeyboardRow = ({letters, onKeyPress}: WordleKeyPadProps) => {
 };
 
 export const WordleKeyPad = ({onKeyPress}: WordleKeyPadProps) => {
-  // const handleKeyPress = (item: string) => {
-  //   getLetter(item);
-  // };
-
   const rowOne = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'];
   const rowTwo = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'];
   const rowThree = ['Z', 'X', 'C', 'V', 'B', 'N', 'M', '⌫'];

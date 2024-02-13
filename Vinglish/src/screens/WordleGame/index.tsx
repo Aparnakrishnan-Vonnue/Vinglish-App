@@ -10,28 +10,12 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import {FONTSIZES} from '../../themes/font';
 import {COLORS} from '../../themes/colors';
 import axios from 'axios';
-import {GuessRow} from '../WordleGameDummy';
+import {GuessRow} from './WordleRow';
 import {useRoute} from '@react-navigation/native';
 import {RootStackNavigationProps} from '../../types/navigation';
+import {wordsArray} from '../../constants';
 
 export const WordleGame = () => {
-  // const numberOfChances = 6;
-
-  // const [wordOfTheDay, setWordOfTheDay] = useState('');
-  // const [keyPressed, setKeyPressed] = useState('');
-  // const [guessNumber, setGuessNumber] = useState(0);
-  // const [startGame, setStartGame] = useState(false);
-  // const [valueItems, setValueItems] = useState<string[]>([]);
-  // const [inputQuery, setInputQuery] = useState('');
-  // const [keyPressCount, setKeyPressCount] = useState(-1);
-  // const [inputWord, setInputWord] = useState('');
-  // const [result, setResult] = useState({
-  //   isIncluded: false,
-  //   isCorrectPosition: false,
-  //   isNotIncluded: false,
-  //   isNotFound: false,
-  //   isCorrectWord: false,
-  // });
   interface GuessObjProps {
     [key: number]: string;
   }
@@ -41,18 +25,10 @@ export const WordleGame = () => {
     2: '',
     3: '',
     4: '',
-    5: '',
   };
-  const [guesses, setGuesses] = useState<GuessObjProps>(guessObj);
   const [guessIndex, setGuessIndex] = useState(0);
+  const [guesses, setGuesses] = useState<GuessObjProps>(guessObj);
   const [inputQuery, setInputQuery] = useState('');
-
-  // const generateRandomWord = () => {
-  //   let selectedWords = dictionary.filter(wordObj => wordObj.word.length === 5);
-  //   let randomWord =
-  //     selectedWords[Math.floor(Math.random() * selectedWords.length)].word;
-  //   setWordOfTheDay(randomWord);
-  // };
 
   const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${inputQuery}`;
 
@@ -64,53 +40,22 @@ export const WordleGame = () => {
           console.log('wordExists');
         }
       })
-      .catch(() => {
-        Alert.alert('Not a valid word');
+      .catch(error => {
+        console.log(error);
+        if (!wordsArray.includes(activeWord)) {
+          Alert.alert('Not a valid word');
+        }
       });
   };
 
   const route = useRoute<RootStackNavigationProps<'WORDLE_GAME'>>();
   const activeWord = route?.params?.word;
 
-  // const handleSubmit = () => {
-  //   getDictionaryData();
-  //   setGuessNumber(prev => prev + 1);
-  //   setStartGame(true);
-  //   setKeyPressCount(-1);
-  //   if (inputWord.toUpperCase() === wordOfTheDay.toUpperCase()) {
-  //     setResult({...result, isCorrectWord: true});
-  //   } else {
-  //     inputWord.split('').map((inputChar, index) => {
-  //       if (wordOfTheDay.split('').includes(inputChar)) {
-  //         if (index === wordOfTheDay.indexOf(inputChar)) {
-  //           setResult({...result, isCorrectPosition: true});
-  //         }
-  //         setResult({...result, isIncluded: true});
-  //       } else {
-  //         setResult({...result, isNotIncluded: true});
-  //       }
-  //     });
-  //   }
-  // };
-
-  // const getValueItems = (item: string) => {
-  //   let inputWord = '';
-  //   const newValueItems = [...valueItems];
-  //   newValueItems.push(item);
-  //   if (newValueItems.length > 5) {
-  //     return;
-  //   }
-  //   inputWord = newValueItems.join('');
-  //   setInputWord(inputWord);
-  //   setValueItems(newValueItems);
-  //   setInputQuery(inputWord);
-  // };
-
-  // console.log(wordOfTheDay);
+  console.log(activeWord);
 
   const handleKeyPress = (letter: string) => {
     const guess: string = guesses[guessIndex];
-    // console.log(letter);
+
     if (letter === 'ENTER') {
       if (guess.length !== 5) {
         console.log('word too short!');
@@ -143,6 +88,8 @@ export const WordleGame = () => {
     setInputQuery(guess + letter);
   };
 
+  console.log(guessIndex);
+
   return (
     <LinearGradient
       colors={['#0F0F0F', '#232D3F', '#005B41', '#008170']}
@@ -151,65 +98,39 @@ export const WordleGame = () => {
       style={styles.linearGradient}>
       <StatusBar backgroundColor={'#005B41'} />
       <View style={styles.gameContainer}>
-        <GuessRow guess={guesses[0]} />
-        <GuessRow guess={guesses[1]} />
-        <GuessRow guess={guesses[2]} />
-        <GuessRow guess={guesses[3]} />
-        <GuessRow guess={guesses[4]} />
-        <GuessRow guess={guesses[5]} />
+        <GuessRow
+          guess={guesses?.[0]}
+          word={activeWord}
+          guessed={guessIndex > 0}
+        />
+        <GuessRow
+          guess={guesses?.[1]}
+          word={activeWord}
+          guessed={guessIndex > 1}
+        />
+        <GuessRow
+          guess={guesses?.[2]}
+          word={activeWord}
+          guessed={guessIndex > 2}
+        />
+        <GuessRow
+          guess={guesses?.[3]}
+          word={activeWord}
+          guessed={guessIndex > 3}
+        />
+        <GuessRow
+          guess={guesses?.[4]}
+          word={activeWord}
+          guessed={guessIndex > 4}
+        />
+        <GuessRow
+          guess={guesses?.[5]}
+          word={activeWord}
+          guessed={guessIndex > 5}
+        />
         <Spacer space={30} />
         <WordleKeyPad onKeyPress={handleKeyPress} />
         <Spacer space={30} />
-        {/* {result.isNotFound && <Text>Word not exist!</Text>}
-        {startGame && (
-          <View>
-            <WordleBoard
-              word={wordOfTheDay}
-              guessNumber={guessNumber}
-              keyPressed={keyPressed}
-              count={keyPressCount}
-              valueItem={valueItems}
-              result={result}
-            />
-            <Spacer space={20} />
-            <View style={{paddingHorizontal: 20}}>
-              <WordleKeyPad
-                getLetter={item => {
-                  setKeyPressed(item);
-                  setKeyPressCount(prev => prev + 1);
-                  getValueItems(item);
-                }}
-              />
-            </View>
-            <Spacer space={20} />
-          </View>
-        )}
-        {startGame ? (
-          <View style={{display: 'flex', flexDirection: 'row', gap: 8}}>
-            <TouchableOpacity style={styles.submitBtn} onPress={handleSubmit}>
-              <Text style={styles.submitText}>Submit</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.clearButton}
-              onPress={() => valueItems.pop()}>
-              <Text style={styles.submitText}>Clear</Text>
-              <Icon
-                name="backspace"
-                size={FONTSIZES.lg}
-                color={COLORS.text.primary}
-              />
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <TouchableOpacity
-            style={styles.submitBtn}
-            onPress={() => {
-              setStartGame(true);
-              generateRandomWord();
-            }}>
-            <Text style={styles.submitText}>Start Game</Text>
-          </TouchableOpacity>
-        )} */}
       </View>
     </LinearGradient>
   );

@@ -2,17 +2,15 @@ import {useNavigation} from '@react-navigation/native';
 import {StatusBar, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {styles} from './style';
-import {dictionary} from '../../../data';
 import {useEffect, useState} from 'react';
+import {wordsArray} from '../../../constants';
 
 export const StartScreen = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const [wordOfTheDay, setWordOfTheDay] = useState<string>('');
 
   const generateRandomWord = () => {
-    let selectedWords = dictionary.filter(wordObj => wordObj.word.length === 5);
-    let randomWord =
-      selectedWords[Math.floor(Math.random() * selectedWords.length)].word;
+    let randomWord = wordsArray[Math.floor(Math.random() * wordsArray.length)];
     setWordOfTheDay(randomWord);
   };
 
