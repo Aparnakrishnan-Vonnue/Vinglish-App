@@ -1,19 +1,18 @@
-import {Alert, StatusBar, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, StatusBar, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {styles} from './style';
-import {WordleBoard} from './WordleBoard';
 import Spacer from '../../components/Spacer';
 import {WordleKeyPad} from './WordleKeyPad';
-import {dictionary} from '../../data';
+// import {dictionary} from '../../data';
 import {useState} from 'react';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {FONTSIZES} from '../../themes/font';
-import {COLORS} from '../../themes/colors';
+// import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+// import {FONTSIZES} from '../../themes/font';
+// import {COLORS} from '../../themes/colors';
 import axios from 'axios';
-import {GuessRow} from './WordleRow';
 import {useRoute} from '@react-navigation/native';
 import {RootStackNavigationProps} from '../../types/navigation';
 import {wordsArray} from '../../constants';
+import GuessRow from './WordleRow';
 
 export const WordleGame = () => {
   interface GuessObjProps {
@@ -51,10 +50,9 @@ export const WordleGame = () => {
   const route = useRoute<RootStackNavigationProps<'WORDLE_GAME'>>();
   const activeWord = route?.params?.word;
 
-  console.log(activeWord);
-
   const handleKeyPress = (letter: string) => {
     const guess: string = guesses[guessIndex];
+    console.log('*********************', guesses);
 
     if (letter === 'ENTER') {
       if (guess.length !== 5) {
@@ -88,8 +86,6 @@ export const WordleGame = () => {
     setInputQuery(guess + letter);
   };
 
-  console.log(guessIndex);
-
   return (
     <LinearGradient
       colors={['#0F0F0F', '#232D3F', '#005B41', '#008170']}
@@ -99,32 +95,32 @@ export const WordleGame = () => {
       <StatusBar backgroundColor={'#005B41'} />
       <View style={styles.gameContainer}>
         <GuessRow
-          guess={guesses?.[0]}
+          guess={guesses[0]}
           word={activeWord}
           guessed={guessIndex > 0}
         />
         <GuessRow
-          guess={guesses?.[1]}
+          guess={guesses[1]}
           word={activeWord}
           guessed={guessIndex > 1}
         />
         <GuessRow
-          guess={guesses?.[2]}
+          guess={guesses[2]}
           word={activeWord}
           guessed={guessIndex > 2}
         />
         <GuessRow
-          guess={guesses?.[3]}
+          guess={guesses[3]}
           word={activeWord}
           guessed={guessIndex > 3}
         />
         <GuessRow
-          guess={guesses?.[4]}
+          guess={guesses[4]}
           word={activeWord}
           guessed={guessIndex > 4}
         />
         <GuessRow
-          guess={guesses?.[5]}
+          guess={guesses[5]}
           word={activeWord}
           guessed={guessIndex > 5}
         />

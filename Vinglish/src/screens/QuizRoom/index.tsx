@@ -31,6 +31,10 @@ const QuizRoom = () => {
     score: 0,
     selectedOption: '',
   });
+  const [wrongGuessCount, setWrongGuessCount] = useState(0);
+  const [rightGuessCount, setRightGuessCount] = useState(0);
+
+  let wrongAnswers: string[] = [];
 
   const generateRandomWord = () => {
     let newWord =
@@ -90,10 +94,15 @@ const QuizRoom = () => {
     if (selectedAnswer === quizObj.actualMeaning) {
       setIsCorrect(true);
       setQuizObj({...quizObj, score: quizObj.score + 1});
+      // setRightGuessCount(prev => prev + 1);
     } else {
       setIsNextButtonDisabled(true);
+      // setWrongGuessCount(prev => prev + 1);
+      // wrongAnswers.push(quizObj.word);
     }
   };
+
+  // console.log(wrongAnswers);
 
   const handleResult = () => {
     setIsClicked(false);

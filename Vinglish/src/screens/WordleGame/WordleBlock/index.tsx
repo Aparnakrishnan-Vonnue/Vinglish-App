@@ -9,7 +9,7 @@ interface BlockProps {
 }
 
 const Block = ({index, guess, word, guessed}: BlockProps) => {
-  const letter = guessed ? guess[index] : '';
+  const letter = '';
   return (
     <View style={styles.square}>
       <Text style={styles.squareValue}>{letter}</Text>

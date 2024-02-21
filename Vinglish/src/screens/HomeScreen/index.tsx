@@ -19,6 +19,7 @@ interface Dictionary {
 
 const HomeScreen = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSecondaryModalOpen, setIsSecondaryModalOpen] = useState(false);
   const [currentWordObj, setCurrentWordObj] = useState<Dictionary>({
     word: '',
     meaning: '',
@@ -50,6 +51,10 @@ const HomeScreen = () => {
     setCurrentWordObj(getRandomWord());
   };
 
+  const handleMeaningBtnClick = () => {
+    setIsSecondaryModalOpen(true);
+  };
+
   return (
     <ScreenWrapper style={styles.screenWrapper}>
       <StatusBar backgroundColor={COLORS.text.secondary} />
@@ -63,6 +68,11 @@ const HomeScreen = () => {
       </View>
       <View style={styles.buttonContainer}>
         <Button label="Generate Word" variant="PRIMARY" onClick={handleClick} />
+        {/* <Button
+          label="Generate Meaning"
+          variant="SECONDARY"
+          onClick={handleMeaningBtnClick}
+        /> */}
       </View>
       <BottomSheet isOpen={isModalOpen} setIsOpen={setIsModalOpen}>
         {currentWordObj && (
