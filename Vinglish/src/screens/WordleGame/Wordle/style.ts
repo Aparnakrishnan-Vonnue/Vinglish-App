@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
 
-export const styles = StyleSheet.create({
+export const stylesMain = StyleSheet.create({
   linearGradient: {
     height: '100%',
   },

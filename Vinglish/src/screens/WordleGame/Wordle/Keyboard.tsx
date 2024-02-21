@@ -1,6 +1,6 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {COLORS} from '../../themes/colors';
-import {FONTSIZES} from '../../themes/font';
+import {COLORS} from '../../../themes/colors';
+import {FONTSIZES} from '../../../themes/font';
 
 interface WordleKeyPadProps {
   letters?: string[];

@@ -9,9 +9,8 @@ import QuizRoom from '../screens/QuizRoom';
 import Dictionary from '../screens/DictionaryScreen';
 import {HangmanGame} from '../screens/Hangman';
 import {TicTacToeGame} from '../screens/TicTacToe';
-import {WordleGame} from '../screens/WordleGame';
 import {StartScreen} from '../screens/WordleGame/StartScreen';
-import {WordleScreen} from '../screens/Wordle';
+import WordleScreen from '../screens/WordleGame/Wordle';
 
 export const Router = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
