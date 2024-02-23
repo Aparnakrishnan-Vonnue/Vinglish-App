@@ -7,6 +7,7 @@ import {
   Button,
   Alert,
   StatusBar,
+  TouchableOpacity,
 } from 'react-native';
 import {wordsArray} from '../../../constants';
 import {WordleKeyPad} from './Keyboard';
@@ -14,9 +15,10 @@ import LinearGradient from 'react-native-linear-gradient';
 import {stylesMain} from './style';
 import {COLORS} from '../../../themes/colors';
 import {FONTSIZES, FONTWEIGHTS} from '../../../themes/font';
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {RootStackNavigationProps} from '../../../types/navigation';
 import axios from 'axios';
+import Spacer from '../../../components/Spacer';
 
 const Block = ({
   index,
@@ -102,6 +104,8 @@ export default function WordleScreen() {
   const route = useRoute<RootStackNavigationProps<'WORDLE_GAME'>>();
   const activeWord = (route?.params?.word).toUpperCase();
 
+  const navigation = useNavigation();
+
   const apiUrl = `https://api.dictionaryapi.dev/api/v2/entries/en_US/${inputQuery}`;
 
   const getDictionaryData = () => {
@@ -144,7 +148,7 @@ export default function WordleScreen() {
         setGuessIndex(guessIndex + 1);
       } else {
         setGameComplete(true);
-        Alert.alert('You lose!');
+        Alert.alert(`You lose! Correct word is ${activeWord}`);
         return;
       }
 
@@ -213,29 +217,27 @@ export default function WordleScreen() {
           />
         </View>
         <View>
-          {gameComplete ? (
-            <View style={styles.gameCompleteWrapper}>
-              <Text>
-                <Text style={styles.bold}>Correct Word:</Text> {activeWord}
-              </Text>
-            </View>
-          ) : null}
           <Keyboard onKeyPress={handleKeyPress} />
+          <Spacer space={10} />
           {gameComplete ? (
-            <View
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}>
-              <Button
-                title="Reset"
+            <View style={styles.resetBtn}>
+              <TouchableOpacity
+                style={styles.resetBtn}
                 onPress={() => {
                   setGameComplete(false);
-                }}
-              />
+                }}>
+                <Text style={styles.resetText}>RESET</Text>
+              </TouchableOpacity>
             </View>
-          ) : null}
+          ) : (
+            <View style={styles.resetBtn}>
+              <TouchableOpacity
+                style={styles.resetBtn}
+                onPress={() => navigation.goBack()}>
+                <Text style={styles.resetText}>Quit Game</Text>
+              </TouchableOpacity>
+            </View>
+          )}
         </View>
       </SafeAreaView>
     </LinearGradient>
@@ -286,7 +288,7 @@ const styles = StyleSheet.create({
 
   container: {
     justifyContent: 'space-between',
-    gap: 60,
+    gap: 40,
   },
 
   // Game complete
@@ -299,5 +301,17 @@ const styles = StyleSheet.create({
   bold: {
     fontWeight: 'bold',
     color: COLORS.text.secondary,
+  },
+  resetBtn: {
+    paddingHorizontal: 20,
+    backgroundColor: '#005B41',
+    paddingVertical: 5,
+    marginHorizontal: 40,
+    borderRadius: 10,
+  },
+  resetText: {
+    textAlign: 'center',
+    color: COLORS.text.secondary,
+    fontSize: FONTSIZES.md,
   },
 });
